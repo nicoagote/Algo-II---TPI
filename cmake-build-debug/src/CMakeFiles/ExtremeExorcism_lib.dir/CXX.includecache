@@ -1,0 +1,110 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../src/modelo/Habitacion.h
+iostream
+-
+set
+-
+vector
+-
+TiposJuego.h
+../src/modelo/TiposJuego.h
+
+../src/modelo/TiposJuego.h
+string
+-
+list
+-
+utility
+-
+iostream
+-
+
+../src/modelo/localizadores/localizador.h
+modelo/Habitacion.h
+../src/modelo/localizadores/modelo/Habitacion.h
+list
+-
+map
+-
+set
+-
+
+../src/modelo/localizadores/localizador_aleatorio.h
+localizador.h
+../src/modelo/localizadores/localizador.h
+
+/cygdrive/c/Users/Nico Agote/Documents/Nico/Proyectos/UBA/Cs Matematicas/Algo II/TPI/src/modelo/Contexto.h
+modelo/TiposJuego.h
+/cygdrive/c/Users/Nico Agote/Documents/Nico/Proyectos/UBA/Cs Matematicas/Algo II/TPI/src/modelo/modelo/TiposJuego.h
+modelo/localizadores/localizador.h
+/cygdrive/c/Users/Nico Agote/Documents/Nico/Proyectos/UBA/Cs Matematicas/Algo II/TPI/src/modelo/modelo/localizadores/localizador.h
+modelo/localizadores/localizador_aleatorio.h
+/cygdrive/c/Users/Nico Agote/Documents/Nico/Proyectos/UBA/Cs Matematicas/Algo II/TPI/src/modelo/modelo/localizadores/localizador_aleatorio.h
+map
+-
+list
+-
+
+/cygdrive/c/Users/Nico Agote/Documents/Nico/Proyectos/UBA/Cs Matematicas/Algo II/TPI/src/modelo/ExtremeExorcism.cpp
+ExtremeExorcism.h
+/cygdrive/c/Users/Nico Agote/Documents/Nico/Proyectos/UBA/Cs Matematicas/Algo II/TPI/src/modelo/ExtremeExorcism.h
+
+/cygdrive/c/Users/Nico Agote/Documents/Nico/Proyectos/UBA/Cs Matematicas/Algo II/TPI/src/modelo/ExtremeExorcism.h
+Contexto.h
+/cygdrive/c/Users/Nico Agote/Documents/Nico/Proyectos/UBA/Cs Matematicas/Algo II/TPI/src/modelo/Contexto.h
+Habitacion.h
+/cygdrive/c/Users/Nico Agote/Documents/Nico/Proyectos/UBA/Cs Matematicas/Algo II/TPI/src/modelo/Habitacion.h
+TiposJuego.h
+/cygdrive/c/Users/Nico Agote/Documents/Nico/Proyectos/UBA/Cs Matematicas/Algo II/TPI/src/modelo/TiposJuego.h
+list
+-
+map
+-
+set
+-
+string
+-
+utility
+-
+vector
+-
+
+/cygdrive/c/Users/Nico Agote/Documents/Nico/Proyectos/UBA/Cs Matematicas/Algo II/TPI/src/modelo/Habitacion.cpp
+Habitacion.h
+/cygdrive/c/Users/Nico Agote/Documents/Nico/Proyectos/UBA/Cs Matematicas/Algo II/TPI/src/modelo/Habitacion.h
+assert.h
+/cygdrive/c/Users/Nico Agote/Documents/Nico/Proyectos/UBA/Cs Matematicas/Algo II/TPI/src/modelo/assert.h
+istream
+-
+sstream
+-
+string
+-
+
+/cygdrive/c/Users/Nico Agote/Documents/Nico/Proyectos/UBA/Cs Matematicas/Algo II/TPI/src/modelo/Habitacion.h
+iostream
+-
+set
+-
+vector
+-
+TiposJuego.h
+/cygdrive/c/Users/Nico Agote/Documents/Nico/Proyectos/UBA/Cs Matematicas/Algo II/TPI/src/modelo/TiposJuego.h
+
+/cygdrive/c/Users/Nico Agote/Documents/Nico/Proyectos/UBA/Cs Matematicas/Algo II/TPI/src/modelo/TiposJuego.h
+string
+-
+list
+-
+utility
+-
+iostream
+-
+
