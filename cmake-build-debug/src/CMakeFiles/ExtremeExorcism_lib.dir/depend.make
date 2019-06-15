@@ -5,6 +5,13 @@ src/CMakeFiles/ExtremeExorcism_lib.dir/modelo/Contexto.cpp.o: ../src/modelo/Habi
 src/CMakeFiles/ExtremeExorcism_lib.dir/modelo/Contexto.cpp.o: ../src/modelo/TiposJuego.h
 src/CMakeFiles/ExtremeExorcism_lib.dir/modelo/Contexto.cpp.o: ../src/modelo/localizadores/localizador.h
 src/CMakeFiles/ExtremeExorcism_lib.dir/modelo/Contexto.cpp.o: ../src/modelo/localizadores/localizador_aleatorio.h
+src/CMakeFiles/ExtremeExorcism_lib.dir/modelo/Contexto.cpp.o: ../src/modulos_basicos/linear_map.h
+src/CMakeFiles/ExtremeExorcism_lib.dir/modelo/Contexto.cpp.o: ../src/modulos_basicos/linear_map.hpp
+src/CMakeFiles/ExtremeExorcism_lib.dir/modelo/Contexto.cpp.o: ../src/modulos_basicos/linear_set.h
+src/CMakeFiles/ExtremeExorcism_lib.dir/modelo/Contexto.cpp.o: ../src/modulos_basicos/linear_set.hpp
+src/CMakeFiles/ExtremeExorcism_lib.dir/modelo/Contexto.cpp.o: ../src/modulos_basicos/linear_set_iterators.h
+src/CMakeFiles/ExtremeExorcism_lib.dir/modelo/Contexto.cpp.o: ../src/modulos_basicos/string_map.h
+src/CMakeFiles/ExtremeExorcism_lib.dir/modelo/Contexto.cpp.o: ../src/modulos_basicos/string_map.hpp
 src/CMakeFiles/ExtremeExorcism_lib.dir/modelo/Contexto.cpp.o: ../src/modelo/Contexto.cpp
 src/CMakeFiles/ExtremeExorcism_lib.dir/modelo/Contexto.cpp.o: ../src/modelo/Contexto.h
 src/CMakeFiles/ExtremeExorcism_lib.dir/modelo/Contexto.cpp.o: ../src/modelo/ExtremeExorcism.h
@@ -15,6 +22,13 @@ src/CMakeFiles/ExtremeExorcism_lib.dir/modelo/ExtremeExorcism.cpp.o: ../src/mode
 src/CMakeFiles/ExtremeExorcism_lib.dir/modelo/ExtremeExorcism.cpp.o: ../src/modelo/TiposJuego.h
 src/CMakeFiles/ExtremeExorcism_lib.dir/modelo/ExtremeExorcism.cpp.o: ../src/modelo/localizadores/localizador.h
 src/CMakeFiles/ExtremeExorcism_lib.dir/modelo/ExtremeExorcism.cpp.o: ../src/modelo/localizadores/localizador_aleatorio.h
+src/CMakeFiles/ExtremeExorcism_lib.dir/modelo/ExtremeExorcism.cpp.o: ../src/modulos_basicos/linear_map.h
+src/CMakeFiles/ExtremeExorcism_lib.dir/modelo/ExtremeExorcism.cpp.o: ../src/modulos_basicos/linear_map.hpp
+src/CMakeFiles/ExtremeExorcism_lib.dir/modelo/ExtremeExorcism.cpp.o: ../src/modulos_basicos/linear_set.h
+src/CMakeFiles/ExtremeExorcism_lib.dir/modelo/ExtremeExorcism.cpp.o: ../src/modulos_basicos/linear_set.hpp
+src/CMakeFiles/ExtremeExorcism_lib.dir/modelo/ExtremeExorcism.cpp.o: ../src/modulos_basicos/linear_set_iterators.h
+src/CMakeFiles/ExtremeExorcism_lib.dir/modelo/ExtremeExorcism.cpp.o: ../src/modulos_basicos/string_map.h
+src/CMakeFiles/ExtremeExorcism_lib.dir/modelo/ExtremeExorcism.cpp.o: ../src/modulos_basicos/string_map.hpp
 src/CMakeFiles/ExtremeExorcism_lib.dir/modelo/ExtremeExorcism.cpp.o: ../src/modelo/Contexto.h
 src/CMakeFiles/ExtremeExorcism_lib.dir/modelo/ExtremeExorcism.cpp.o: ../src/modelo/ExtremeExorcism.cpp
 src/CMakeFiles/ExtremeExorcism_lib.dir/modelo/ExtremeExorcism.cpp.o: ../src/modelo/ExtremeExorcism.h

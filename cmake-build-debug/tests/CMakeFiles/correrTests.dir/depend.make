@@ -13,6 +13,8 @@ tests/CMakeFiles/correrTests.dir/ee_tests.cpp.o: ../src/modulos_basicos/linear_m
 tests/CMakeFiles/correrTests.dir/ee_tests.cpp.o: ../src/modulos_basicos/linear_set.h
 tests/CMakeFiles/correrTests.dir/ee_tests.cpp.o: ../src/modulos_basicos/linear_set.hpp
 tests/CMakeFiles/correrTests.dir/ee_tests.cpp.o: ../src/modulos_basicos/linear_set_iterators.h
+tests/CMakeFiles/correrTests.dir/ee_tests.cpp.o: ../src/modulos_basicos/string_map.h
+tests/CMakeFiles/correrTests.dir/ee_tests.cpp.o: ../src/modulos_basicos/string_map.hpp
 tests/CMakeFiles/correrTests.dir/ee_tests.cpp.o: ../tests/ee_tests.cpp
 tests/CMakeFiles/correrTests.dir/ee_tests.cpp.o: ../tests/estado/EstadoJuego.h
 tests/CMakeFiles/correrTests.dir/ee_tests.cpp.o: ../tests/gtest-1.8.1/gtest.h
@@ -28,6 +30,8 @@ tests/CMakeFiles/correrTests.dir/estado/EstadoJuego.cpp.o: ../src/modulos_basico
 tests/CMakeFiles/correrTests.dir/estado/EstadoJuego.cpp.o: ../src/modulos_basicos/linear_set.h
 tests/CMakeFiles/correrTests.dir/estado/EstadoJuego.cpp.o: ../src/modulos_basicos/linear_set.hpp
 tests/CMakeFiles/correrTests.dir/estado/EstadoJuego.cpp.o: ../src/modulos_basicos/linear_set_iterators.h
+tests/CMakeFiles/correrTests.dir/estado/EstadoJuego.cpp.o: ../src/modulos_basicos/string_map.h
+tests/CMakeFiles/correrTests.dir/estado/EstadoJuego.cpp.o: ../src/modulos_basicos/string_map.hpp
 tests/CMakeFiles/correrTests.dir/estado/EstadoJuego.cpp.o: ../tests/estado/EstadoJuego.cpp
 tests/CMakeFiles/correrTests.dir/estado/EstadoJuego.cpp.o: ../tests/estado/EstadoJuego.h
 tests/CMakeFiles/correrTests.dir/estado/EstadoJuego.cpp.o: ../tests/gtest-1.8.1/gtest.h

@@ -65,13 +65,20 @@ Habitacion string_to_hab(string s) {
     return Habitacion(height, occupied);
 }
 
+Habitacion::Habitacion(unsigned int tam, set<Pos> ocupadas) : _habitacion(vector<vector<bool> >(tam, vector<bool>(tam, false))) {
+    for (Pos p : ocupadas) {
+        _habitacion[p.first][p.second] = true;
+    }
+}
 
-// TODO!!! Completar
+unsigned int Habitacion::tam() const {
+    return _habitacion.size();
+}
 
-Habitacion::Habitacion(unsigned int tam, set<Pos> ocupadas) {}
+bool Habitacion::ocupado(Pos p) const {
+    return _habitacion[p.first][p.second];
+}
 
-unsigned int Habitacion::tam() const {}
-
-bool Habitacion::ocupado(Pos) const {}
-
-bool Habitacion::operator==(const Habitacion&) const {}
+bool Habitacion::operator==(const Habitacion& h) const {
+    return _habitacion == h._habitacion;
+}

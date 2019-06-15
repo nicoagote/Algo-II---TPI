@@ -20,7 +20,7 @@ public:
     bool operator==(const Habitacion&) const;
 
 private:
-  // Completar
+    vector<vector<bool>> _habitacion;
 };
 
 

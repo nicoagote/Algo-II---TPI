@@ -40,6 +40,50 @@ set
 localizador.h
 ../src/modelo/localizadores/localizador.h
 
+../src/modulos_basicos/linear_map.h
+list
+-
+iostream
+-
+linear_map.hpp
+../src/modulos_basicos/linear_map.hpp
+
+../src/modulos_basicos/linear_map.hpp
+linear_map.h
+../src/modulos_basicos/linear_map.h
+utility
+-
+
+../src/modulos_basicos/linear_set.h
+utility
+-
+ostream
+-
+linear_map.h
+../src/modulos_basicos/linear_map.h
+linear_set.hpp
+../src/modulos_basicos/linear_set.hpp
+linear_set_iterators.h
+../src/modulos_basicos/linear_set_iterators.h
+
+../src/modulos_basicos/linear_set.hpp
+linear_set.h
+../src/modulos_basicos/linear_set.h
+
+../src/modulos_basicos/linear_set_iterators.h
+linear_set.h
+../src/modulos_basicos/linear_set.h
+iostream
+-
+
+../src/modulos_basicos/string_map.h
+string_map.hpp
+../src/modulos_basicos/string_map.hpp
+
+../src/modulos_basicos/string_map.hpp
+string_map.h
+../src/modulos_basicos/string_map.h
+
 /cygdrive/c/Users/Nico Agote/Documents/Nico/Proyectos/UBA/Cs Matematicas/Algo II/TPI/src/modelo/Contexto.h
 modelo/TiposJuego.h
 /cygdrive/c/Users/Nico Agote/Documents/Nico/Proyectos/UBA/Cs Matematicas/Algo II/TPI/src/modelo/modelo/TiposJuego.h
@@ -63,6 +107,10 @@ Habitacion.h
 /cygdrive/c/Users/Nico Agote/Documents/Nico/Proyectos/UBA/Cs Matematicas/Algo II/TPI/src/modelo/Habitacion.h
 TiposJuego.h
 /cygdrive/c/Users/Nico Agote/Documents/Nico/Proyectos/UBA/Cs Matematicas/Algo II/TPI/src/modelo/TiposJuego.h
+modulos_basicos/string_map.h
+/cygdrive/c/Users/Nico Agote/Documents/Nico/Proyectos/UBA/Cs Matematicas/Algo II/TPI/src/modelo/modulos_basicos/string_map.h
+modulos_basicos/linear_set.h
+/cygdrive/c/Users/Nico Agote/Documents/Nico/Proyectos/UBA/Cs Matematicas/Algo II/TPI/src/modelo/modulos_basicos/linear_set.h
 list
 -
 map
@@ -74,18 +122,6 @@ string
 utility
 -
 vector
--
-
-/cygdrive/c/Users/Nico Agote/Documents/Nico/Proyectos/UBA/Cs Matematicas/Algo II/TPI/src/modelo/Habitacion.cpp
-Habitacion.h
-/cygdrive/c/Users/Nico Agote/Documents/Nico/Proyectos/UBA/Cs Matematicas/Algo II/TPI/src/modelo/Habitacion.h
-assert.h
-/cygdrive/c/Users/Nico Agote/Documents/Nico/Proyectos/UBA/Cs Matematicas/Algo II/TPI/src/modelo/assert.h
-istream
--
-sstream
--
-string
 -
 
 /cygdrive/c/Users/Nico Agote/Documents/Nico/Proyectos/UBA/Cs Matematicas/Algo II/TPI/src/modelo/Habitacion.h

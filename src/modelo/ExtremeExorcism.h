@@ -4,7 +4,8 @@
 #include "Contexto.h"
 #include "Habitacion.h"
 #include "TiposJuego.h"
-// #include "modulos_basicos/string_map.h"
+#include "modulos_basicos/string_map.h"
+#include "modulos_basicos/linear_set.h"
 #include <list>
 #include <map>
 #include <set>
@@ -44,7 +45,43 @@ public:
   const list<Fantasma> &fantasmas() const;
 
 private:
-  // Completar
+    // ==================================== Estructuras auxiliares para más legibilidad ========================================= //
+    struct EventoJugador;
+    struct InfoJ;
+    struct InfoJV;
+
+    struct EventoJugador {
+        unsigned int tick;
+        Pos pos;
+        Dir dir;
+        bool dispara;
+
+        EventoJugador(unsigned int, Pos, Dir, bool);
+
+        bool operator==(const Evento&) const;
+    };
+
+    struct InfoJ {
+        linear_set<InfoJV>::iterator* aInfoJV;
+        list<EventoJugador> historial;
+    };
+
+    struct InfoJV {
+        Jugador nombre;
+        Pos pos;
+        Dir dir;
+    };
+
+    unsigned int _ticks;
+    linear_set<InfoJV> _jugadoresVivos;
+    linear_set<InfoJ*> _jVJ;
+    string_map<InfoJ> _jugadores;
+    linear_set<Jugador> _nombres;
+    list<PosYDir> _fantasmasVivos;
+    linear_set<unsigned int> _fantasmasVivos_Id;
+    vector<vector<Evento>> _fantasmas;
+    Habitacion _habitacion;
+    vector<vector<bool>> _mapa;
 };
 
 #endif

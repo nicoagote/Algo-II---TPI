@@ -6,6 +6,13 @@ src/CMakeFiles/ExtremeExorcism_lib.dir/modelo/Contexto.cpp.o
  ../src/modelo/TiposJuego.h
  ../src/modelo/localizadores/localizador.h
  ../src/modelo/localizadores/localizador_aleatorio.h
+ ../src/modulos_basicos/linear_map.h
+ ../src/modulos_basicos/linear_map.hpp
+ ../src/modulos_basicos/linear_set.h
+ ../src/modulos_basicos/linear_set.hpp
+ ../src/modulos_basicos/linear_set_iterators.h
+ ../src/modulos_basicos/string_map.h
+ ../src/modulos_basicos/string_map.hpp
  /cygdrive/c/Users/Nico Agote/Documents/Nico/Proyectos/UBA/Cs Matematicas/Algo II/TPI/src/modelo/Contexto.cpp
  /cygdrive/c/Users/Nico Agote/Documents/Nico/Proyectos/UBA/Cs Matematicas/Algo II/TPI/src/modelo/Contexto.h
  /cygdrive/c/Users/Nico Agote/Documents/Nico/Proyectos/UBA/Cs Matematicas/Algo II/TPI/src/modelo/ExtremeExorcism.h
@@ -16,6 +23,13 @@ src/CMakeFiles/ExtremeExorcism_lib.dir/modelo/ExtremeExorcism.cpp.o
  ../src/modelo/TiposJuego.h
  ../src/modelo/localizadores/localizador.h
  ../src/modelo/localizadores/localizador_aleatorio.h
+ ../src/modulos_basicos/linear_map.h
+ ../src/modulos_basicos/linear_map.hpp
+ ../src/modulos_basicos/linear_set.h
+ ../src/modulos_basicos/linear_set.hpp
+ ../src/modulos_basicos/linear_set_iterators.h
+ ../src/modulos_basicos/string_map.h
+ ../src/modulos_basicos/string_map.hpp
  /cygdrive/c/Users/Nico Agote/Documents/Nico/Proyectos/UBA/Cs Matematicas/Algo II/TPI/src/modelo/Contexto.h
  /cygdrive/c/Users/Nico Agote/Documents/Nico/Proyectos/UBA/Cs Matematicas/Algo II/TPI/src/modelo/ExtremeExorcism.cpp
  /cygdrive/c/Users/Nico Agote/Documents/Nico/Proyectos/UBA/Cs Matematicas/Algo II/TPI/src/modelo/ExtremeExorcism.h

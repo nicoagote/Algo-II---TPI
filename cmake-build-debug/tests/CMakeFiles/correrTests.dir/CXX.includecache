@@ -25,6 +25,10 @@ Habitacion.h
 ../src/modelo/Habitacion.h
 TiposJuego.h
 ../src/modelo/TiposJuego.h
+modulos_basicos/string_map.h
+../src/modelo/modulos_basicos/string_map.h
+modulos_basicos/linear_set.h
+../src/modelo/modulos_basicos/linear_set.h
 list
 -
 map
@@ -111,6 +115,14 @@ linear_set.h
 ../src/modulos_basicos/linear_set.h
 iostream
 -
+
+../src/modulos_basicos/string_map.h
+string_map.hpp
+../src/modulos_basicos/string_map.hpp
+
+../src/modulos_basicos/string_map.hpp
+string_map.h
+../src/modulos_basicos/string_map.h
 
 /cygdrive/c/Users/Nico Agote/Documents/Nico/Proyectos/UBA/Cs Matematicas/Algo II/TPI/tests/ee_tests.cpp
 estado/EstadoJuego.h

@@ -3,7 +3,7 @@
 // TODO!!! Completar
 
 ExtremeExorcism::ExtremeExorcism(Habitacion h, set<Jugador> jugadores, PosYDir f_init,
-list<Accion> acciones_fantasma, Contexto *ctx) {}
+list<Accion> acciones_fantasma, Contexto *ctx) : _habitacion(h) {}
 
 void ExtremeExorcism::pasar() {}
 
@@ -18,19 +18,33 @@ list<PosYDir> ExtremeExorcism::posicionFantasmas() const {
 }
 
 PosYDir ExtremeExorcism::posicionEspecial() const {
-    return PosYDir();
+    return PosYDir(make_pair(0,0), ARRIBA);
 }
 
-list<PosYDir> ExtremeExorcism::disparosFantasmas() const {}
+list<PosYDir> ExtremeExorcism::disparosFantasmas() const {
+    return list<PosYDir>();
+}
 
-set<Pos> ExtremeExorcism::posicionesDisparadas() const {}
+set<Pos> ExtremeExorcism::posicionesDisparadas() const {
+    return set<Pos>();
+}
 
-bool ExtremeExorcism::jugadorVivo(Jugador j) const {}
+bool ExtremeExorcism::jugadorVivo(Jugador j) const {
+    return false;
+}
 
-const Habitacion& ExtremeExorcism::habitacion() const {}
+const Habitacion& ExtremeExorcism::habitacion() const {
+    return Habitacion(0, set<Pos>());
+}
 
-PosYDir ExtremeExorcism::posicionJugador(Jugador j) const {}
+PosYDir ExtremeExorcism::posicionJugador(Jugador j) const {
+    return PosYDir(make_pair(0,0), ARRIBA);
+}
 
-const set<Jugador>& ExtremeExorcism::jugadores() const {}
+const set<Jugador>& ExtremeExorcism::jugadores() const {
+    return set<Jugador>();
+}
 
-const list<Fantasma>& ExtremeExorcism::fantasmas() const {}
+const list<Fantasma>& ExtremeExorcism::fantasmas() const {
+    return list<Fantasma>();
+}

@@ -14,6 +14,8 @@ tests/CMakeFiles/correrTests.dir/ee_tests.cpp.o
  ../src/modulos_basicos/linear_set.h
  ../src/modulos_basicos/linear_set.hpp
  ../src/modulos_basicos/linear_set_iterators.h
+ ../src/modulos_basicos/string_map.h
+ ../src/modulos_basicos/string_map.hpp
  /cygdrive/c/Users/Nico Agote/Documents/Nico/Proyectos/UBA/Cs Matematicas/Algo II/TPI/tests/ee_tests.cpp
  /cygdrive/c/Users/Nico Agote/Documents/Nico/Proyectos/UBA/Cs Matematicas/Algo II/TPI/tests/estado/EstadoJuego.h
  /cygdrive/c/Users/Nico Agote/Documents/Nico/Proyectos/UBA/Cs Matematicas/Algo II/TPI/tests/gtest-1.8.1/gtest.h
@@ -29,6 +31,8 @@ tests/CMakeFiles/correrTests.dir/estado/EstadoJuego.cpp.o
  ../src/modulos_basicos/linear_set.h
  ../src/modulos_basicos/linear_set.hpp
  ../src/modulos_basicos/linear_set_iterators.h
+ ../src/modulos_basicos/string_map.h
+ ../src/modulos_basicos/string_map.hpp
  /cygdrive/c/Users/Nico Agote/Documents/Nico/Proyectos/UBA/Cs Matematicas/Algo II/TPI/tests/estado/EstadoJuego.cpp
  /cygdrive/c/Users/Nico Agote/Documents/Nico/Proyectos/UBA/Cs Matematicas/Algo II/TPI/tests/estado/EstadoJuego.h
  /cygdrive/c/Users/Nico Agote/Documents/Nico/Proyectos/UBA/Cs Matematicas/Algo II/TPI/tests/gtest-1.8.1/gtest.h
