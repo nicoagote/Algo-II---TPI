@@ -4,6 +4,11 @@
 #include <sstream>
 #include <string>
 
+
+
+/* test nro 789*/
+
+
 Habitacion string_to_hab(std::istream& is) {
     int row = 0;
     int col = 0;
