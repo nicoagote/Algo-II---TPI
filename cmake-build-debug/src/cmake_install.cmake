@@ -1,4 +1,4 @@
-# Install script for directory: /cygdrive/c/Users/Nico Agote/Documents/Nico/Proyectos/UBA/Cs Matematicas/Algo II/TPI/src
+# Install script for directory: /home/nagote/CLionProjects/Algo_II_-_TPI/src
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -25,6 +25,11 @@ if(NOT CMAKE_INSTALL_COMPONENT)
   else()
     set(CMAKE_INSTALL_COMPONENT)
   endif()
+endif()
+
+# Install shared libraries without execute permission?
+if(NOT DEFINED CMAKE_INSTALL_SO_NO_EXE)
+  set(CMAKE_INSTALL_SO_NO_EXE "1")
 endif()
 
 # Is this installation the result of a crosscompile?

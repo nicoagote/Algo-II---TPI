@@ -49,6 +49,7 @@ private:
     struct EventoJugador;
     struct InfoJ;
     struct InfoJV;
+    struct Estrategia;
 
     struct EventoJugador {
         unsigned int tick;
@@ -72,6 +73,10 @@ private:
         Dir dir;
     };
 
+    struct Estrategia {
+        vector<Evento> _estrategia;
+    };
+
     unsigned int _ticks;
     linear_set<InfoJV> _jugadoresVivos;
     linear_set<InfoJ*> _jVJ;
@@ -79,7 +84,7 @@ private:
     linear_set<Jugador> _nombres;
     list<PosYDir> _fantasmasVivos;
     linear_set<unsigned int> _fantasmasVivos_Id;
-    vector<vector<Evento>> _fantasmas;
+    vector<Estrategia> _fantasmas;
     Habitacion _habitacion;
     vector<vector<bool>> _mapa;
 };

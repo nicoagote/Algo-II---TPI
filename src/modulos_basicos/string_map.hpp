@@ -49,12 +49,7 @@ string_map<T>::Nodo::Nodo(string_map<T>::Nodo* original) {
                 siguientes[j] = new Nodo(original->siguientes[j]);
             }
         }
-
     }
-
-
-
-
 }
 
 
@@ -103,7 +98,6 @@ string_map<T>::~string_map(){
 
 template <typename T>
 T& string_map<T>::operator[](const string& clave){
-    // COMPLETAR
     Nodo* actual = raiz;
     for (int i = 0; i < clave.length(); ++i) {
         int letra = int(clave[i]);
