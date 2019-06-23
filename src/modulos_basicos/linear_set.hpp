@@ -120,3 +120,12 @@ std::ostream &operator<<(std::ostream &os, const linear_set<T> &s) {
   os << " }";
   return os;
 }
+
+template<typename T>
+linear_set<T>::operator set<T>() const {
+    set<T> s;
+    for(T t : *this) {
+        s.insert(t);
+    }
+    return s;
+}

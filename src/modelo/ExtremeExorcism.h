@@ -58,23 +58,35 @@ private:
         bool dispara;
 
         EventoJugador(unsigned int, Pos, Dir, bool);
-
-        bool operator==(const Evento&) const;
+        PosYDir posYDir() const;
     };
 
     struct InfoJ {
         linear_set<InfoJV>::iterator* aInfoJV;
         list<EventoJugador> historial;
+
+        InfoJ(); // TODO!!! : NO USAR!!! - EL HISTORIAL ROMPE EL INVARIANTE
+        InfoJ(linear_set<InfoJV>::iterator*, list<EventoJugador>);
     };
 
     struct InfoJV {
         Jugador nombre;
         Pos pos;
         Dir dir;
+
+        InfoJV(Jugador, Pos, Dir);
+        PosYDir posYDir() const;
+        operator pair<Jugador, PosYDir>() const;
     };
 
     struct Estrategia {
-        vector<Evento> _estrategia;
+        public:
+            Estrategia(vector<Evento>);
+            Estrategia(PosYDir, list<Accion>);
+            operator Fantasma() const;
+
+        private :
+            vector<Evento> _estrategia;
     };
 
     unsigned int _ticks;

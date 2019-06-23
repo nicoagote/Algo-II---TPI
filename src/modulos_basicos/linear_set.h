@@ -204,6 +204,8 @@ class linear_set {
    */
   const_iterator end() const;
 
+  operator set<T>() const;
+
  private:
   /**
    * \name Representación:
