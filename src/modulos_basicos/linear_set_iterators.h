@@ -87,6 +87,14 @@ class linear_set<T>::const_iterator {
    */
   bool operator!=(const linear_set<T>::const_iterator &other) const;
 
+    /** @brief Borra el nodo al que apunta y devuelve el iterador avanzado
+     *
+     * TODO!!
+     * COMPLETAR AAAAAAAAAAAAAAAAAA
+     *
+     * */
+    linear_set<T>::iterator erase();
+
  private:
   friend class linear_set<T>;
 

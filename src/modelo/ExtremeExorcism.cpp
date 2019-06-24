@@ -20,11 +20,15 @@ ExtremeExorcism::ExtremeExorcism(Habitacion h, set<Jugador> jugadores, PosYDir f
 }
 
 void ExtremeExorcism::pasar() {
-    // TODO!!!
+    // TODO!!
+    _ticks++;
+    actuarFantasmas();
 }
 
 void ExtremeExorcism::ejecutarAccion(Jugador j, Accion a) {
     // TODO!!!
+    _ticks++;
+    actuarJugador(j,a);
 }
 
 list<pair<Jugador, PosYDir>> ExtremeExorcism::posicionJugadores() const {
@@ -73,7 +77,7 @@ const set<Jugador>& ExtremeExorcism::jugadores() const {
 const list<Fantasma>& ExtremeExorcism::fantasmas() const {
     list<Fantasma> fantasmas;
     for(Estrategia e : _fantasmas) {
-        fantasmas.push_back(e);
+        fantasmas.push_back((Fantasma) e);
     }
     return fantasmas;
 }
@@ -102,4 +106,61 @@ ExtremeExorcism::Estrategia::Estrategia(PosYDir init, list<Accion> h) : _estrate
 }
 ExtremeExorcism::Estrategia::operator Fantasma() const {
     return list<Evento>(_estrategia.begin(), _estrategia.end());
+}
+
+
+void ExtremeExorcism::actuarFantasmas() {
+    _fantasmasVivos.clear();
+
+
+    /* COPIAR CODIGO DE POSICIONES ALCANZADAS ACA!!!
+     *
+     *  ACA SE PINTA EL MAPA
+     *
+     *   // TODO!!
+
+     *
+     *
+     * */
+
+    for (auto it = _jVJ.begin(); it != _jVJ.end();) {
+        InfoJ* estadoAcutal = *(it);
+        linear_set<InfoJV>::iterator nodo_en_vivos = *(estadoAcutal->aInfoJV);
+        Pos p = estadoAcutal->historial.back().pos;
+
+        if (_mapa[p.first][p.second]) {
+            // COMPLETAR ESTA FUNCION QUE AGREGA LA MUERTE AL HISTORIAL !!
+            // TODO!!
+            estadoAcutal->historial.morir(_ticks);
+            // COMPLETAR ESTA FUNCION QUE ELIMINA EL NODO AL QUE APUNTA Y LO AVANZA!!!!!!
+            // TODO!!
+            nodo_en_vivos.erase();
+            estadoAcutal->aInfoJV = nullptr;
+            it = it.erase();
+
+        } else {
+            ++it;
+
+        }
+
+        /* COPIAR CODIGO DE POSICIONES ALCANZADAS ACA!!!
+     *
+     *  ACA SE DESPINTA EL MAPA
+         *
+         *
+         *      // TODO!!
+     *
+     *
+     * */
+
+        
+    }
+
+
+
+
+}
+
+void ExtremeExorcism::actuarJugador(Jugador j, Accion a) {
+    // TODO!!
 }
