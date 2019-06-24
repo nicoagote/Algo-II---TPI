@@ -76,6 +76,7 @@ private:
         void actuar(Habitacion& h, Accion a , unsigned int tick);
         void morir(unsigned int tick);
         EventoJugador back() const;
+        const vector<Evento>& armarEstrategia() const;
 
     private:
         EventoJugador actualizar(Habitacion& h, Accion a, unsigned int tick, EventoJugador e);
@@ -105,6 +106,7 @@ private:
         public:
             Estrategia(vector<Evento>);
             Estrategia(Habitacion& h, PosYDir, list<Accion>);
+            Estrategia(Historial& h);
             operator Fantasma() const;
             Evento operator[](unsigned int tick) const;
 

@@ -198,6 +198,23 @@ void ExtremeExorcism::Historial::morir(unsigned int tick) {
 ExtremeExorcism::EventoJugador ExtremeExorcism::Historial::back() const {
     return historial.back();
 }
+const vector<Evento>& ExtremeExorcism::Historial::armarEstrategia() const {
+    list<EventoJugador>::const_iterator it = historial.begin();
+    vector<Evento> v = vector<Evento>(historial.back().tick + 1);
+    Evento def = Evento(historial.front().pos, historial.front().dir, false);
+
+    for(int i = 0; i < v.size(); i++) {
+        if(it->tick != i) {
+            v[i] = def;
+        } else {
+            v[i] = Evento(it->pos, it->dir, it->dispara);
+            def = Evento(it->pos, it->dir, false);
+            ++it;
+        }
+    }
+
+    return v;
+}
 
 
 ExtremeExorcism::Estrategia::Estrategia(vector<Evento> e) : _estrategia(e) {}
@@ -206,6 +223,7 @@ ExtremeExorcism::Estrategia::Estrategia(Habitacion& h, PosYDir init, list<Accion
         _estrategia.push_back(actuar(h, *it, _estrategia[_estrategia.size() - 1]));
     }
 }
+ExtremeExorcism::Estrategia::Estrategia(Historial& h) : _estrategia(h.armarEstrategia()) {}
 ExtremeExorcism::Estrategia::operator Fantasma() const {
     return list<Evento>(_estrategia.begin(), _estrategia.end());
 }
