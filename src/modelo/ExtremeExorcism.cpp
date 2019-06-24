@@ -126,8 +126,9 @@ linear_set<Pos> &ExtremeExorcism::posicionesDisparadasAux(linear_set<Pos> &posic
         PosYDir posydir = *it;
         Pos casillero = posydir.pos;
         Dir direccion = posydir.dir;
-        while (_habitacion.disponible((_habitacion.actualizarD(direccion,posydir)).pos)) {
-            casillero = (_habitacion.actualizarD(direccion,posydir).pos);
+        while (_habitacion.actualizarD(direccion,posydir).pos != posydir.pos) {
+            posydir = _habitacion.actualizarD(direccion, posydir);
+            casillero = posydir.pos;
             if (not (_mapa[get<0>(casillero)][get<1>(casillero)])) {
                 _mapa[get<0>(casillero)][get<1>(casillero)] = true;
                 posicionesAlcanzadas.fast_insert(casillero);
@@ -302,14 +303,16 @@ void ExtremeExorcism::actuarFantasmas() {
             Pos casillero = evento.pos;
             Dir direccion = evento.dir;
 
+            _fantasmasVivos.push_back(posYDirFantasmas);
 
-            while (_habitacion.disponible((_habitacion.actualizarD(direccion, posYDirFantasmas)).pos)) {
-                casillero = (_habitacion.actualizarD(direccion, posYDirFantasmas).pos);
+
+            while (_habitacion.actualizarD(direccion, posYDirFantasmas).pos != posYDirFantasmas.pos) {
+                posYDirFantasmas = _habitacion.actualizarD(direccion, posYDirFantasmas);
+                casillero = posYDirFantasmas.pos;
                 if (not(_mapa[get<0>(casillero)][get<1>(casillero)])) {
                     _mapa[get<0>(casillero)][get<1>(casillero)] = true;
                     posicionesAlcanzadas.fast_insert(casillero);
                 }
-
             }
         }
 
