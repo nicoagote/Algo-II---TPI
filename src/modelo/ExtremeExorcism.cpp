@@ -270,17 +270,28 @@ Dir ExtremeExorcism::Estrategia::invertir(Dir d) const {
 
 void ExtremeExorcism::actuarFantasmas() {
     _fantasmasVivos.clear();
+     linear_set<Pos> posicionesAlcanzadas;
+     //pintar el mapa
+    for (auto it = _fantasmasVivos_Id.begin(); it!= _fantasmasVivos_Id.end(); ++it) {
+        int fantasma = *it;
+        Evento evento = _fantasmas[fantasma][_ticks];
+        if (evento.dispara) {
+            PosYDir posYDirFantasmas = evento.pos_y_dir();
+            Pos casillero = evento.pos;
+            Dir direccion = evento.dir;
 
 
-    /* COPIAR CODIGO DE POSICIONES ALCANZADAS ACA!!!
-     *
-     *  ACA SE PINTA EL MAPA
-     *
-     *   // TODO!!
+            while (_habitacion.disponible((_habitacion.actualizarD(direccion, posYDirFantasmas)).pos)) {
+                casillero = (_habitacion.actualizarD(direccion, posYDirFantasmas).pos);
+                if (not(_mapa[get<0>(casillero)][get<1>(casillero)])) {
+                    _mapa[get<0>(casillero)][get<1>(casillero)] = true;
+                    posicionesAlcanzadas.fast_insert(casillero);
+                }
 
-     *
-     *
-     * */
+            }
+        }
+
+
 
     for (auto it = _jVJ.begin(); it != _jVJ.end();) {
         InfoJ* estadoAcutal = *(it);
@@ -303,14 +314,13 @@ void ExtremeExorcism::actuarFantasmas() {
         }
 
     }
+//Despintar el mapa
 
-    /* COPIAR CODIGO DE POSICIONES ALCANZADAS ACA!!!
-    *
-    *  ACA SE DESPINTA EL MAPA
-     *
-     *  // TODO!!
-    *
-    */
+        for (auto itt = posicionesAlcanzadas.begin(); itt != posicionesAlcanzadas.end(); ++itt) {
+            Pos casillero = *itt;
+            _mapa[get<0>(casillero)][get<1>(casillero)] = false;
+        }
+    }
 
 
 
@@ -366,7 +376,10 @@ void ExtremeExorcism::resetearFantasmas() {
 
 }
 
-void ExtremeExorcism::resetearJugadores() {}
+void ExtremeExorcism::resetearJugadores() {
+
+}
+
 
 bool ExtremeExorcism::cambioRonda() {
     return  _fantasmasVivos_Id.count(_fantasmas.size()-1);
