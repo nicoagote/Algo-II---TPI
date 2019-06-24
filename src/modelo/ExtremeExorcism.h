@@ -77,7 +77,7 @@ private:
         void actuar(Habitacion& h, Accion a , unsigned int tick);
         void morir(unsigned int tick);
         EventoJugador back() const;
-        const vector<Evento>& armarEstrategia() const;
+        const vector<Evento> armarEstrategia() const;
         bool operator==(Historial) const;
 
     private:
@@ -147,6 +147,10 @@ private:
     Habitacion _habitacion;
     vector<vector<bool>> _mapa;
     Contexto *_ctx;
+
+    list<Fantasma> aux_1;
+    set<Jugador> aux_2;
+
 };
 
 #endif
