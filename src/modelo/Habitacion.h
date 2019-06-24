@@ -17,7 +17,13 @@ public:
 
     bool ocupado(Pos) const;
 
+    bool disponible(Pos) const;
+
     bool operator==(const Habitacion&) const;
+
+    PosYDir actualizar(Accion a, PosYDir pd);
+
+    PosYDir actualizar(Dir d, PosYDir pd);
 
 private:
     vector<vector<bool>> _habitacion;

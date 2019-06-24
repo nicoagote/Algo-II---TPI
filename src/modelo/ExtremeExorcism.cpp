@@ -14,7 +14,7 @@ ExtremeExorcism::ExtremeExorcism(Habitacion h, set<Jugador> jugadores, PosYDir f
     for(pair<Jugador, PosYDir> p : ubicacionesIniciales) {
         _nombres.insert(p.first);
         linear_set<InfoJV>::iterator jVIt = _jugadoresVivos.fast_insert(InfoJV(p.first, p.second.pos, p.second.dir));
-        _jugadores[p.first] = InfoJ(&jVIt, list<EventoJugador>(1, EventoJugador(0, p.second.pos, p.second.dir, false)));
+        _jugadores[p.first] = InfoJ(&jVIt, Historial(p.second.pos, p.second.dir));
         _jVJ.fast_insert(&_jugadores[p.first]);
     }
 }
@@ -89,8 +89,8 @@ PosYDir ExtremeExorcism::EventoJugador::posYDir() const {
     return PosYDir(pos, dir);
 }
 
-ExtremeExorcism::InfoJ::InfoJ() : aInfoJV(nullptr), historial(list<EventoJugador>()) {}
-ExtremeExorcism::InfoJ::InfoJ(linear_set<InfoJV>::iterator* p, list<ExtremeExorcism::EventoJugador> h) : aInfoJV(p), historial(h) {}
+ExtremeExorcism::InfoJ::InfoJ() : aInfoJV(nullptr), historial(Historial()) {}
+ExtremeExorcism::InfoJ::InfoJ(linear_set<InfoJV>::iterator* p, Historial h) : aInfoJV(p), historial(h) {}
 
 ExtremeExorcism::InfoJV::InfoJV(Jugador j, Pos p, Dir d) : nombre(j), pos(p), dir(d) {}
 PosYDir ExtremeExorcism::InfoJV::posYDir() const {
@@ -99,6 +99,43 @@ PosYDir ExtremeExorcism::InfoJV::posYDir() const {
 ExtremeExorcism::InfoJV::operator pair<Jugador, PosYDir>() const {
     return make_pair(nombre, posYDir());
 }
+
+//Constructor por defecto
+ExtremeExorcism::Historial::Historial() : historial(list<EventoJugador>()) {}
+//Constructor custom. Dado un tick, posición y dirección actualiza el historial
+ExtremeExorcism::Historial::Historial(Pos pos, Dir dir){
+    historial.push_back(EventoJugador(0, pos, dir, false));
+}
+ExtremeExorcism::EventoJugador ExtremeExorcism::Historial::actualizar(Habitacion& h, Accion a, unsigned int tick,
+                                                                      ExtremeExorcism::EventoJugador e) {
+    EventoJugador nuevoEvento = e;
+
+    if(a == DISPARAR){
+        nuevoEvento.tick = tick;
+        nuevoEvento.dispara = true;
+    }else if(a == ESPERAR){
+        nuevoEvento.tick = tick;
+        nuevoEvento.dispara = false;
+    }else{
+        PosYDir nueva = h.actualizar(a, e.posYDir());
+        nuevoEvento.pos = nueva.pos;
+        nuevoEvento.dir = nueva.dir;
+        nuevoEvento.tick = tick;
+        nuevoEvento.dispara = false;
+    }
+    return nuevoEvento;
+}
+void ExtremeExorcism::Historial::actuar(Habitacion& h, Accion a, unsigned int tick) {
+    EventoJugador nuevoEvento = actualizar(h, a, tick, historial.back());
+    historial.push_back(nuevoEvento);
+}
+void ExtremeExorcism::Historial::morir(unsigned int tick) {
+    historial.push_back(EventoJugador(tick, Pos(-1, -1), historial.back().dir, false));
+}
+ExtremeExorcism::EventoJugador ExtremeExorcism::Historial::back() const {
+    return historial.back();
+}
+
 
 ExtremeExorcism::Estrategia::Estrategia(vector<Evento> e) : _estrategia(e) {}
 ExtremeExorcism::Estrategia::Estrategia(Habitacion& h, PosYDir init, list<Accion> la) : _estrategia(vector<Evento>(1, Evento(init.pos, init.dir, false))) {

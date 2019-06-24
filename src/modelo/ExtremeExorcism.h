@@ -50,6 +50,7 @@ private:
     struct InfoJ;
     struct InfoJV;
     struct Estrategia;
+    struct Historial;
 
     struct EventoJugador {
         unsigned int tick;
@@ -57,16 +58,30 @@ private:
         Dir dir;
         bool dispara;
 
-        EventoJugador(unsigned int, Pos, Dir, bool);
+        EventoJugador(unsigned int tick, Pos, Dir, bool);
         PosYDir posYDir() const;
     };
 
+    struct Historial {
+    public:
+        Historial();
+        Historial(Pos pos, Dir dir);
+        void actuar(Habitacion& h, Accion a , unsigned int tick);
+        void morir(unsigned int tick);
+        EventoJugador back() const;
+
+    private:
+        EventoJugador actualizar(Habitacion& h, Accion a, unsigned int tick, EventoJugador e);
+        list<EventoJugador> historial;
+    };
+
+
     struct InfoJ {
         linear_set<InfoJV>::iterator* aInfoJV;
-        list<EventoJugador> historial;
+        Historial historial;
 
         InfoJ(); // TODO!!! : NO USAR!!! - EL HISTORIAL ROMPE EL INVARIANTE
-        InfoJ(linear_set<InfoJV>::iterator*, list<EventoJugador>);
+        InfoJ(linear_set<InfoJV>::iterator*, Historial);
     };
 
     struct InfoJV {
