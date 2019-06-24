@@ -122,7 +122,8 @@ private:
     bool cambioRonda();
 
     void resetearJugadores();
-    void resetearFantasmas();
+    void resetearFantasmas(Jugador);
+
 
     unsigned int _ticks;
     linear_set<InfoJV> _jugadoresVivos;
@@ -134,6 +135,7 @@ private:
     vector<Estrategia> _fantasmas;
     Habitacion _habitacion;
     vector<vector<bool>> _mapa;
+    Contexto *_ctx;
 };
 
 #endif

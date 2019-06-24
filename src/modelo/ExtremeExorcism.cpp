@@ -2,11 +2,13 @@
 
 // TODO!!! Completar
 
-ExtremeExorcism::ExtremeExorcism(Habitacion h, set<Jugador> jugadores, PosYDir f_init, list<Accion> acciones_fantasma, Contexto *ctx) : _ticks(0), _jugadoresVivos(linear_set<InfoJV>()), _jVJ(linear_set<InfoJ*>()), _jugadores(string_map<InfoJ>()), _nombres(linear_set<Jugador>()), _fantasmasVivos(list<PosYDir>()), _fantasmasVivos_Id(linear_set<unsigned int>()), _fantasmas(vector<Estrategia>()), _habitacion(h), _mapa(vector<vector<bool>>(h.tam(), vector<bool>(h.tam(), false))) {
+ExtremeExorcism::ExtremeExorcism(Habitacion h, set<Jugador> jugadores, PosYDir f_init, list<Accion> acciones_fantasma, Contexto *ctx) : _ticks(0), _jugadoresVivos(linear_set<InfoJV>()), _jVJ(linear_set<InfoJ*>()), _jugadores(string_map<InfoJ>()), _nombres(linear_set<Jugador>()), _fantasmasVivos(list<PosYDir>()), _fantasmasVivos_Id(linear_set<unsigned int>()), _fantasmas(vector<Estrategia>()), _habitacion(h), _mapa(vector<vector<bool>>(h.tam(), vector<bool>(h.tam(), false))), _ctx(
+        nullptr) {
     // Generamos la estrategia del fantasma y completamos la información relevante a los fantasmas
     _fantasmas.push_back(Estrategia(h, f_init, acciones_fantasma));
     _fantasmasVivos.push_back(f_init);
     _fantasmasVivos_Id.fast_insert(0);
+
 
     // Usamos la función localizar_jugadores y completamos la información relevante a nuestros jugadores en el juego
     map<Jugador, PosYDir> ubicacionesIniciales = ctx->localizar_jugadores(jugadores, list<Fantasma>(1, _fantasmas[0]), h);
@@ -17,6 +19,9 @@ ExtremeExorcism::ExtremeExorcism(Habitacion h, set<Jugador> jugadores, PosYDir f
         _jugadores[p.first] = InfoJ(&jVIt, Historial(p.second.pos, p.second.dir));
         _jVJ.fast_insert(&_jugadores[p.first]);
     }
+
+    //Guardamos el contexto
+    _ctx = ctx;
 }
 
 void ExtremeExorcism::pasar() {
@@ -44,8 +49,10 @@ list<PosYDir> ExtremeExorcism::posicionFantasmas() const {
 }
 
 PosYDir ExtremeExorcism::posicionEspecial() const {
-    // TODO!!!
-    return PosYDir(make_pair(0,0), ARRIBA);
+    // Devuelve la PosYDir del fantasma especial en este momento.
+    Estrategia fantasmaEspecial = _fantasmas.back();
+    Evento ultimoEvento = fantasmaEspecial[_ticks];
+    return PosYDir(ultimoEvento.pos, ultimoEvento.dir);
 }
 
 
@@ -223,7 +230,6 @@ ExtremeExorcism::Estrategia::Estrategia(Habitacion& h, PosYDir init, list<Accion
         _estrategia.push_back(actuar(h, *it, _estrategia[_estrategia.size() - 1]));
     }
 }
-ExtremeExorcism::Estrategia::Estrategia(Historial& h) : _estrategia(h.armarEstrategia()) {}
 ExtremeExorcism::Estrategia::operator Fantasma() const {
     return list<Evento>(_estrategia.begin(), _estrategia.end());
 }
@@ -372,14 +378,42 @@ void ExtremeExorcism::actuarJugador(Jugador& j, Accion& a) {
 
 }
 
-void ExtremeExorcism::resetearFantasmas() {
+void ExtremeExorcism::resetearFantasmas(Jugador j) {
+    //Crea la Estrategia para el nuevo fantasma (Rellena)
+    Estrategia nuevaEstrategia = Estrategia(_jugadores[j].historial);
+    //Agregamos al vector de fantasmas
+    _fantasmas.push_back(nuevaEstrategia);
+
+    //Reseteamos el conjunto de fantmasVivosId
+    for(int i = 0; i < _fantasmas.size(); i++){
+        _fantasmasVivos_Id.insert(i);
+    }
+
+    //Reseteamos el conjunto de fantasmasVivos
+    _fantasmasVivos.clear();
+    for(int i = 0; i < _fantasmas.size(); i++){
+        Evento e = _fantasmas[i][0];
+        PosYDir pd = e.pos_y_dir();
+        _fantasmasVivos.push_back(pd);
+
+    }
 
 }
 
 void ExtremeExorcism::resetearJugadores() {
+    // Usamos la función localizar_jugadores y completamos la información relevante a nuestros jugadores en el juego
+    map<Jugador, PosYDir> ubicacionesIniciales = _ctx->localizar_jugadores(_nombres, fantasmas(), _habitacion);
+    _jugadoresVivos = linear_set<InfoJV>();
+    _jVJ = linear_set<InfoJ*>();
 
+    for(pair<Jugador, PosYDir> p : ubicacionesIniciales) {
+        linear_set<InfoJV>::iterator jVIt = _jugadoresVivos.fast_insert(InfoJV(p.first, p.second.pos, p.second.dir));
+
+        _jugadores[p.first] = InfoJ(&jVIt, Historial(p.second.pos, p.second.dir));
+
+        _jVJ.fast_insert(&_jugadores[p.first]);
+    }
 }
-
 
 bool ExtremeExorcism::cambioRonda() {
     return  _fantasmasVivos_Id.count(_fantasmas.size()-1);
