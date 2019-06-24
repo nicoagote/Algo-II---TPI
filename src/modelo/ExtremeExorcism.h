@@ -109,7 +109,11 @@ private:
     };
 
     void actuarFantasmas();
-    void actuarJugador(Jugador j, Accion a);
+    void actuarJugador(Jugador& j, Accion& a);
+    bool cambioRonda();
+
+    void resetearJugadores();
+    void resetearFantasmas();
 
     unsigned int _ticks;
     linear_set<InfoJV> _jugadoresVivos;

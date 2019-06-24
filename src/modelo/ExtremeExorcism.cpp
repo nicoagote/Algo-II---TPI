@@ -221,24 +221,73 @@ void ExtremeExorcism::actuarFantasmas() {
 
         }
 
-        /* COPIAR CODIGO DE POSICIONES ALCANZADAS ACA!!!
-     *
-     *  ACA SE DESPINTA EL MAPA
-         *
-         *
-         *      // TODO!!
-     *
-     *
-     * */
-
-
     }
+
+    /* COPIAR CODIGO DE POSICIONES ALCANZADAS ACA!!!
+    *
+    *  ACA SE DESPINTA EL MAPA
+     *
+     *  // TODO!!
+    *
+    */
 
 
 
 
 }
 
-void ExtremeExorcism::actuarJugador(Jugador j, Accion a) {
-    // TODO!!
+void ExtremeExorcism::actuarJugador(Jugador& j, Accion& a) {
+    // Actualizamos info del jugador que actuó.
+    InfoJ* estadoActual = &_jugadores[j];
+    estadoActual->historial.actuar(_habitacion, a, _ticks);
+
+
+
+    Pos pos = estadoActual->historial.back().pos;
+    Dir dir = estadoActual->historial.back().dir;
+    bool disparo = estadoActual->historial.back().dir;
+
+    //Guardamos las posiciones alcanzadas por disparos para poder saber qué fantasmas murieron.
+    linear_set<Pos> alcanzadas;
+
+
+    while (false /*funcion que hay que usar???*/)
+    {
+
+    }
+
+    //Eliminamos a los fantasmas que fueron alcanzados por disparos del conjunto de ID’S.
+    //Si el fantasma especial fue alcanzado, cambio un flag cambioDeRonda a true.
+
+    bool cambioRonda = false;
+
+
+    for (auto it = _fantasmasVivos_Id.begin(); it != _fantasmasVivos_Id.end();) {
+        int id = *(it);
+        Pos p_fantasma = _fantasmas[id][_ticks-1].pos;
+
+
+        if (_mapa[p_fantasma.first][p_fantasma.second]) {
+            it = it.erase();
+            cambioRonda = cambioRonda or id == (_fantasmas.size()-1);
+
+        } else {
+            ++it;
+
+        }
+
+    }
+
+
+}
+
+void ExtremeExorcism::resetearFantasmas() {
+
+}
+
+void ExtremeExorcism::resetearJugadores() {}
+
+bool ExtremeExorcism::cambioRonda() {
+    return  _fantasmasVivos_Id.count(_fantasmas.size()-1);
+
 }
