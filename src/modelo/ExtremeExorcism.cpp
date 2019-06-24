@@ -4,7 +4,7 @@
 
 ExtremeExorcism::ExtremeExorcism(Habitacion h, set<Jugador> jugadores, PosYDir f_init, list<Accion> acciones_fantasma, Contexto *ctx) : _ticks(0), _jugadoresVivos(linear_set<InfoJV>()), _jVJ(linear_set<InfoJ*>()), _jugadores(string_map<InfoJ>()), _nombres(linear_set<Jugador>()), _fantasmasVivos(list<PosYDir>()), _fantasmasVivos_Id(linear_set<unsigned int>()), _fantasmas(vector<Estrategia>()), _habitacion(h), _mapa(vector<vector<bool>>(h.tam(), vector<bool>(h.tam(), false))) {
     // Generamos la estrategia del fantasma y completamos la información relevante a los fantasmas
-    _fantasmas.push_back(Estrategia(f_init, acciones_fantasma));
+    _fantasmas.push_back(Estrategia(h, f_init, acciones_fantasma));
     _fantasmasVivos.push_back(f_init);
     _fantasmasVivos_Id.fast_insert(0);
 
@@ -101,12 +101,53 @@ ExtremeExorcism::InfoJV::operator pair<Jugador, PosYDir>() const {
 }
 
 ExtremeExorcism::Estrategia::Estrategia(vector<Evento> e) : _estrategia(e) {}
-ExtremeExorcism::Estrategia::Estrategia(PosYDir init, list<Accion> h) : _estrategia(vector<Evento>(1, Evento(init.pos, init.dir, false))) {
-    // TODO!!! : Necesita de las funciones de mover, y esas cosas
+ExtremeExorcism::Estrategia::Estrategia(Habitacion& h, PosYDir init, list<Accion> la) : _estrategia(vector<Evento>(1, Evento(init.pos, init.dir, false))) {
+    for (list<Accion>::iterator it = la.begin(); it != la.end(); ++it) {
+        _estrategia.push_back(actuar(h, *it, _estrategia[_estrategia.size() - 1]));
+    }
 }
 ExtremeExorcism::Estrategia::operator Fantasma() const {
     return list<Evento>(_estrategia.begin(), _estrategia.end());
 }
+Evento ExtremeExorcism::Estrategia::operator [](unsigned int t) const {
+    bool esEnLaIda = (t / (_estrategia.size() + 5)) % 2;
+    t = t % (_estrategia.size() + 5);
+    if(t < _estrategia.size()) {
+        if(esEnLaIda) {
+            return _estrategia[t];
+        } else {
+            return Evento(_estrategia[_estrategia.size() - 1 - t].pos, invertir(_estrategia[_estrategia.size() - 1 - t].dir), _estrategia[_estrategia.size() - 1 - t].dispara);
+        }
+    } else {
+        if(esEnLaIda) {
+            return Evento(_estrategia[_estrategia.size()-1].pos, _estrategia[_estrategia.size()-1].dir, false);
+        } else {
+            return Evento(_estrategia[0].pos, invertir(_estrategia[0].dir), false);
+        }
+    }
+}
+Evento ExtremeExorcism::Estrategia::actuar(Habitacion &h, Accion a, Evento e) const {
+    PosYDir ubicacionNueva = h.actualizar(a, e.pos_y_dir());
+    return Evento(ubicacionNueva.pos, ubicacionNueva.dir, a == DISPARAR);
+}
+Dir ExtremeExorcism::Estrategia::invertir(Dir d) const {
+    switch (d) {
+    case ARRIBA:
+        d = ABAJO;
+        break;
+    case IZQUIERDA:
+        d = DERECHA;
+        break;
+    case ABAJO:
+        d = ARRIBA;
+        break;
+    case DERECHA:
+        d = IZQUIERDA;
+        break;
+    }
+    return d;
+}
+
 
 
 void ExtremeExorcism::actuarFantasmas() {
@@ -153,7 +194,7 @@ void ExtremeExorcism::actuarFantasmas() {
      *
      * */
 
-        
+
     }
 
 

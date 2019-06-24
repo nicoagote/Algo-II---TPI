@@ -82,10 +82,14 @@ private:
     struct Estrategia {
         public:
             Estrategia(vector<Evento>);
-            Estrategia(PosYDir, list<Accion>);
+            Estrategia(Habitacion& h, PosYDir, list<Accion>);
             operator Fantasma() const;
+            Evento operator[](unsigned int tick) const;
 
         private :
+            Evento actuar(Habitacion& h, Accion a, Evento e) const;
+            Dir invertir(Dir d) const;
+
             vector<Evento> _estrategia;
     };
 
