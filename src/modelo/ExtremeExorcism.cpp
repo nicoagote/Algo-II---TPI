@@ -48,14 +48,77 @@ PosYDir ExtremeExorcism::posicionEspecial() const {
     return PosYDir(make_pair(0,0), ARRIBA);
 }
 
+
+//Consigue la posisicion y direccion de los fantasmas que disparan en el tick acutal
+
 list<PosYDir> ExtremeExorcism::disparosFantasmas() const {
-    // TODO!!!
-    return list<PosYDir>();
+    list<PosYDir> res;
+
+        for (auto it = _fantasmasVivos_Id.begin(); it!= _fantasmasVivos_Id.end(); ++it) {
+            int fantasma = *it;
+            Evento evento = _fantasmas[fantasma][_ticks];
+            if (evento.dispara){
+                tuple<PosYDir()> temp = evento.pos_y_dir();
+                res.push_back(temp);
+            }
+    }
+    return res;
 }
 
-set<Pos> ExtremeExorcism::posicionesDisparadas() const {
-    // TODO!!!
-    return set<Pos>();
+
+//Realiza lo mismo que la funcion anterior, pero devuelve por referencia
+
+list<PosYDir> &ExtremeExorcism:: disparosFantasmasAux(list<PosYDir>& res) const{
+    for (auto it = _fantasmasVivos_Id.begin(); it!= _fantasmasVivos_Id.end(); ++it) {
+        int fantasma = *it;
+        Evento evento = _fantasmas[fantasma][_ticks];
+        if (evento.dispara){
+            PosYDir temp = evento.pos_y_dir();
+            res.push_back(temp);
+
+        }
+
+    }
+    return res;
+}
+
+//cambiar linear_set a set
+// Problemas con el const de la funcion.
+//
+ /*
+set<Pos> ExtremeExorcism::posicionesDisparadas()  const {
+    linear_set<Pos> posicionesAlcanzadas;
+    linear_set<Pos> res = posicionesDisparadasAux(posicionesAlcanzadas);
+    return res;
+}
+*/
+linear_set<Pos> &ExtremeExorcism::posicionesDisparadasAux(linear_set<Pos> &posicionesAlcanzadas) {
+    list<PosYDir> hola; //lista vacia
+    list<PosYDir> &posYDirInicial = disparosFantasmasAux(hola);
+
+
+    for (auto it = posYDirInicial.begin(); it != posYDirInicial.end(); ++it){
+        PosYDir posydir = *it;
+        Pos casillero = posydir.pos;
+        Dir direccion = posydir.dir;
+        while (_habitacion.disponible((_habitacion.actualizarD(direccion,posydir)).pos)) {
+            casillero = (_habitacion.actualizarD(direccion,posydir).pos);
+            if (not (_mapa[get<0>(casillero)][get<1>(casillero)])) {
+                _mapa[get<0>(casillero)][get<1>(casillero)] = true;
+                posicionesAlcanzadas.fast_insert(casillero);
+            }
+
+        }
+
+    }
+    for (auto itt = posicionesAlcanzadas.begin() ;  itt != posicionesAlcanzadas.end(); ++itt){
+        Pos casillero = *itt;
+        _mapa[get<0>(casillero)][get<1>(casillero)] = false;
+    }
+
+
+return posicionesAlcanzadas;
+
 }
 
 bool ExtremeExorcism::jugadorVivo(Jugador j) const {

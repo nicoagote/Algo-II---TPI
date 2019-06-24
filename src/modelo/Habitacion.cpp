@@ -76,7 +76,7 @@ Habitacion::Habitacion(unsigned int tam, set<Pos> ocupadas) : _habitacion(vector
     }
 }
 
-PosYDir Habitacion::actualizar(Accion a, PosYDir pd) {
+PosYDir Habitacion::actualizar(Accion a, PosYDir pd) const {
     if(a == DISPARAR or a == ESPERAR){
         return pd;
     }else if(a == MARRIBA){
@@ -106,7 +106,7 @@ PosYDir Habitacion::actualizar(Accion a, PosYDir pd) {
     }
 }
 
-PosYDir Habitacion::actualizar(Dir d, PosYDir pd) {
+PosYDir Habitacion::actualizarD(Dir d, PosYDir pd) const{
     if(d == ARRIBA){
         if(not disponible(make_pair(pd.pos.first, pd.pos.second+1))){
             return PosYDir(pd.pos, ARRIBA);

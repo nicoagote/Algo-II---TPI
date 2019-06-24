@@ -30,10 +30,12 @@ public:
 
   PosYDir posicionEspecial() const;
 
+
+
   list<PosYDir> disparosFantasmas() const;
-
+/* // Problemas con el const de la funcion.
   set<Pos> posicionesDisparadas() const;
-
+*/
   bool jugadorVivo(Jugador j) const;
 
   const Habitacion &habitacion() const;
@@ -45,6 +47,11 @@ public:
   const list<Fantasma> &fantasmas() const;
 
 private:
+    linear_set<Pos> &posicionesDisparadasAux(linear_set<Pos> &posicionesAlcanzadas);
+
+
+    list<PosYDir>& disparosFantasmasAux(list<PosYDir>& res) const;
+
     // ==================================== Estructuras auxiliares para más legibilidad ========================================= //
     struct EventoJugador;
     struct InfoJ;

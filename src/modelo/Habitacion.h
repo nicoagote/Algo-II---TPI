@@ -21,9 +21,9 @@ public:
 
     bool operator==(const Habitacion&) const;
 
-    PosYDir actualizar(Accion a, PosYDir pd);
+    PosYDir actualizar(Accion a, PosYDir pd) const;
 
-    PosYDir actualizar(Dir d, PosYDir pd);
+    PosYDir actualizarD(Dir d, PosYDir pd) const;
 
 private:
     vector<vector<bool>> _habitacion;
