@@ -67,6 +67,7 @@ private:
 
         EventoJugador(unsigned int tick, Pos, Dir, bool);
         PosYDir posYDir() const;
+        bool operator==(EventoJugador) const;
     };
 
     struct Historial {
@@ -77,6 +78,7 @@ private:
         void morir(unsigned int tick);
         EventoJugador back() const;
         const vector<Evento>& armarEstrategia() const;
+        bool operator==(Historial) const;
 
     private:
         EventoJugador actualizar(Habitacion& h, Accion a, unsigned int tick, EventoJugador e);
@@ -90,6 +92,9 @@ private:
 
         InfoJ(); // TODO!!! : NO USAR!!! - EL HISTORIAL ROMPE EL INVARIANTE
         InfoJ(linear_set<InfoJV>::iterator*, Historial);
+
+        bool operator==(InfoJ) const;
+
     };
 
     struct InfoJV {
@@ -100,17 +105,23 @@ private:
         InfoJV(Jugador, Pos, Dir);
         PosYDir posYDir() const;
         operator pair<Jugador, PosYDir>() const;
+
+        bool operator==(InfoJV) const;
+
     };
 
     struct Estrategia {
         public:
             Estrategia(vector<Evento>);
             Estrategia(Habitacion& h, PosYDir, list<Accion>);
-            Estrategia(Historial& h);
+            Estrategia(Historial h);
             operator Fantasma() const;
             Evento operator[](unsigned int tick) const;
 
-        private :
+            bool operator==(Estrategia) const;
+
+
+    private :
             Evento actuar(Habitacion& h, Accion a, Evento e) const;
             Dir invertir(Dir d) const;
 
