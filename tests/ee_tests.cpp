@@ -98,8 +98,7 @@ TEST(EE, InitRonda_J1) {
 
   ExtremeExorcism ee(h, js, PosYDir({2, 2}, ARRIBA), {}, &ctx);
 
-//  TODO!!! : Preguntar a March que pasa con esto
-//  EXPECT_EQ(ee.jugadores(), js);
+  EXPECT_EQ(ee.jugadores(), js);
 
   // Jugador
   EXPECT_TRUE(ee.jugadorVivo("P1"));
@@ -382,7 +381,7 @@ TEST(EE, PasarConRepeticion) {
 
 
 // Fantasma mata jugador
-/*
+
 TEST(EE, FantasmaMataJugador) {
   Localizador *l = new LocalizadorEstatico({
       {"0", {PosYDir({0, 0}, ARRIBA)}},
@@ -462,8 +461,7 @@ TEST(EE, FantasmaMataJugadoresEnMismaPosicion) {
                     "r..\n", ee);
   delete l; 
 }
-*/
-/*
+
 // Disparo fantasma bloqueado por mapa
 TEST(EE, FantasmaNoMataJugadorEnSuCasillero) {
   Localizador *l = new LocalizadorEstatico({
@@ -489,7 +487,6 @@ TEST(EE, FantasmaNoMataJugadorEnSuCasillero) {
   EXPECT_EQ(ee.posicionFantasmas(), list<PosYDir>{PosYDir({0, 1}, ARRIBA)});
   delete l; 
 }
-*/
 // Fantasma dispara y jugador se mueve simultáneamente
 TEST(EE, JugadorEsquivaDisparo) {
   Localizador *l = new LocalizadorEstatico({
@@ -559,7 +556,7 @@ TEST(EE, CambioDeRonda) {
   VALIDAR_ESTADO(1, "w..\n"
                  ".#.\n"
                  ".W.\n", ee);
-  
+
   ee.ejecutarAccion("0", MIZQUIERDA);
   VALIDAR_ESTADO(1, "w..\n"
                  ".#.\n"
@@ -569,7 +566,7 @@ TEST(EE, CambioDeRonda) {
   VALIDAR_ESTADO(1, "w..\n"
                  "W#.\n"
                  "...\n", ee);
-  
+
   ee.ejecutarAccion("0", DISPARAR);
   VALIDAR_ESTADO(1, "w.W\n"
                  ".#.\n"

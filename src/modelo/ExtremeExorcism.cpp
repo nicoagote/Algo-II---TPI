@@ -12,14 +12,14 @@ ExtremeExorcism::ExtremeExorcism(Habitacion h, set<Jugador> jugadores, PosYDir f
     aux_1.push_back((Fantasma) _fantasmas[0]);
 
 
-                // Usamos la función localizar_jugadores y completamos la información relevante a nuestros jugadores en el juego
-                map<Jugador, PosYDir> ubicacionesIniciales = ctx->localizar_jugadores(jugadores, list<Fantasma>(1, _fantasmas[0]), h);
+    // Usamos la función localizar_jugadores y completamos la información relevante a nuestros jugadores en el juego
+    map<Jugador, PosYDir> ubicacionesIniciales = ctx->localizar_jugadores(jugadores, list<Fantasma>(1, _fantasmas[0]), h);
 
 
     for(pair<Jugador, PosYDir> p : ubicacionesIniciales) {
         _nombres.insert(p.first);
         linear_set<InfoJV>::iterator jVIt = _jugadoresVivos.fast_insert(InfoJV(p.first, p.second.pos, p.second.dir));
-        _jugadores[p.first] = InfoJ(&jVIt, Historial(p.second.pos, p.second.dir));
+        _jugadores[p.first] = InfoJ(new linear_set<InfoJV>::iterator(jVIt), Historial(p.second.pos, p.second.dir));
         _jVJ.fast_insert(&_jugadores[p.first]);
     }
 
@@ -46,11 +46,6 @@ void ExtremeExorcism::ejecutarAccion(Jugador j, Accion a) {
         _ticks = 0;
     } else {
         actuarFantasmas();
-    }
-
-    aux_1.clear();
-    for (int i = 0; i < _fantasmas.size(); ++i) {
-        aux_1.push_back((Fantasma) _fantasmas[i]);
     }
 }
 
@@ -107,16 +102,12 @@ list<PosYDir> &ExtremeExorcism:: disparosFantasmasAux(list<PosYDir>& res) const{
     return res;
 }
 
-//cambiar linear_set a set
-// Problemas con el const de la funcion.
-//
- /*
-set<Pos> ExtremeExorcism::posicionesDisparadas()  const {
+set<Pos> ExtremeExorcism::posicionesDisparadas() {
     linear_set<Pos> posicionesAlcanzadas;
     linear_set<Pos> res = posicionesDisparadasAux(posicionesAlcanzadas);
     return res;
 }
-*/
+
 linear_set<Pos> &ExtremeExorcism::posicionesDisparadasAux(linear_set<Pos> &posicionesAlcanzadas) {
     list<PosYDir> hola; //lista vacia
     list<PosYDir> &posYDirInicial = disparosFantasmasAux(hola);
@@ -177,6 +168,25 @@ PosYDir ExtremeExorcism::EventoJugador::posYDir() const {
 
 ExtremeExorcism::InfoJ::InfoJ() : aInfoJV(nullptr), historial(Historial()) {}
 ExtremeExorcism::InfoJ::InfoJ(linear_set<InfoJV>::iterator* p, Historial h) : aInfoJV(p), historial(h) {}
+ExtremeExorcism::InfoJ::~InfoJ() {
+    if(aInfoJV != NULL) {
+        delete aInfoJV;
+        aInfoJV = NULL;
+    }
+}
+void ExtremeExorcism::InfoJ::operator=(ExtremeExorcism::InfoJ other) {
+    if(aInfoJV != NULL) {
+        delete aInfoJV;
+        aInfoJV = NULL;
+    }
+
+    if(other.aInfoJV != NULL) {
+        aInfoJV = new linear_set<InfoJV>::iterator(*(other.aInfoJV));
+    } else {
+        aInfoJV = NULL;
+    }
+    historial = other.historial;
+}
 
 ExtremeExorcism::InfoJV::InfoJV(Jugador j, Pos p, Dir d) : nombre(j), pos(p), dir(d) {}
 PosYDir ExtremeExorcism::InfoJV::posYDir() const {
@@ -331,7 +341,8 @@ void ExtremeExorcism::actuarFantasmas() {
             auto copiaIt = it;
             ++it;
             _jVJ.erase(*copiaIt);
-
+            delete estadoAcutal->aInfoJV;
+            estadoAcutal->aInfoJV = NULL;
         } else {
             ++it;
 
@@ -356,18 +367,13 @@ void ExtremeExorcism::actuarJugador(Jugador& j, Accion& a) {
     InfoJ* estadoActual = &_jugadores[j];
     estadoActual->historial.actuar(_habitacion, a, _ticks);
 
-
-
     Pos pos = estadoActual->historial.back().pos;
     Dir dir = estadoActual->historial.back().dir;
     bool disparo = estadoActual->historial.back().dispara;
 
-//    TODO!!!
- //     linear_set<InfoJV>::iterator datos_en_vivos = *(estadoActual->aInfoJV);
- //     (*(datos_en_vivos)).pos = pos;
-   //   (*(datos_en_vivos)).dir = dir;
-
-
+    // TODO!!! Agregar complejidades
+    _jugadoresVivos.erase(*(*(estadoActual->aInfoJV)));
+     *(estadoActual->aInfoJV) = _jugadoresVivos.fast_insert(InfoJV(j, pos, dir));
 
     //Guardamos las posiciones alcanzadas por disparos para poder saber qué fantasmas murieron.
     linear_set<Pos> alcanzadas;
@@ -407,26 +413,30 @@ void ExtremeExorcism::actuarJugador(Jugador& j, Accion& a) {
 
 }
 
-void ExtremeExorcism::resetearFantasmas(Jugador j) {
-    //Crea la Estrategia para el nuevo fantasma (Rellena)
-    Estrategia nuevaEstrategia = Estrategia(_jugadores[j].historial);
-    //Agregamos al vector de fantasmas
-    _fantasmas.push_back(nuevaEstrategia);
+        void ExtremeExorcism::resetearFantasmas(Jugador j) {
+            //Crea la Estrategia para el nuevo fantasma (Rellena)
+            Estrategia nuevaEstrategia = Estrategia(_jugadores[j].historial);
+            //Agregamos al vector de fantasmas
+            _fantasmas.push_back(nuevaEstrategia);
 
-    //Reseteamos el conjunto de fantmasVivosId
-    for(int i = 0; i < _fantasmas.size(); i++){
-        _fantasmasVivos_Id.insert(i);
+            //Reseteamos el conjunto de fantmasVivosId
+            for(int i = 0; i < _fantasmas.size(); i++){
+                _fantasmasVivos_Id.insert(i);
+            }
+
+            //Reseteamos el conjunto de fantasmasVivos
+            _fantasmasVivos.clear();
+            for(int i = 0; i < _fantasmas.size(); i++){
+                Evento e = _fantasmas[i][0];
+                PosYDir pd = e.pos_y_dir();
+                _fantasmasVivos.push_back(pd);
+
     }
 
-    //Reseteamos el conjunto de fantasmasVivos
-    _fantasmasVivos.clear();
-    for(int i = 0; i < _fantasmas.size(); i++){
-        Evento e = _fantasmas[i][0];
-        PosYDir pd = e.pos_y_dir();
-        _fantasmasVivos.push_back(pd);
-
+    aux_1.clear();
+    for (int i = 0; i < _fantasmas.size(); ++i) {
+        aux_1.push_back((Fantasma) _fantasmas[i]);
     }
-
 }
 
 void ExtremeExorcism::resetearJugadores() {
@@ -438,7 +448,11 @@ void ExtremeExorcism::resetearJugadores() {
     for(pair<Jugador, PosYDir> p : ubicacionesIniciales) {
         linear_set<InfoJV>::iterator jVIt = _jugadoresVivos.fast_insert(InfoJV(p.first, p.second.pos, p.second.dir));
 
-        _jugadores[p.first] = InfoJ(&jVIt, Historial(p.second.pos, p.second.dir));
+        if(_jugadores[p.first].aInfoJV != NULL) {
+            delete _jugadores[p.first].aInfoJV;
+            _jugadores[p.first].aInfoJV = NULL;
+        }
+        _jugadores[p.first] = InfoJ(new linear_set<InfoJV>::iterator(jVIt), Historial(p.second.pos, p.second.dir));
 
         _jVJ.fast_insert(&_jugadores[p.first]);
     }

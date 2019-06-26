@@ -30,12 +30,10 @@ public:
 
   PosYDir posicionEspecial() const;
 
-
-
   list<PosYDir> disparosFantasmas() const;
-/* // Problemas con el const de la funcion.
-  set<Pos> posicionesDisparadas() const;
-*/
+
+  set<Pos> posicionesDisparadas();
+
   bool jugadorVivo(Jugador j) const;
 
   const Habitacion &habitacion() const;
@@ -90,9 +88,11 @@ private:
         linear_set<InfoJV>::iterator* aInfoJV;
         Historial historial;
 
+        ~InfoJ();
         InfoJ(); // TODO!!! : NO USAR!!! - EL HISTORIAL ROMPE EL INVARIANTE
         InfoJ(linear_set<InfoJV>::iterator*, Historial);
 
+        void operator=(InfoJ);
         bool operator==(InfoJ) const;
 
     };
@@ -102,6 +102,7 @@ private:
         Pos pos;
         Dir dir;
 
+        InfoJV();
         InfoJV(Jugador, Pos, Dir);
         PosYDir posYDir() const;
         operator pair<Jugador, PosYDir>() const;
