@@ -40,7 +40,7 @@ void ExtremeExorcism::pasar() {
 void ExtremeExorcism::ejecutarAccion(Jugador j, Accion a) {
     _ticks++;
     actuarJugador(j,a);
-    if (cambioRonda()) {
+    if (not cambioRonda()) {
         resetearFantasmas(j);
         resetearJugadores();
         _ticks = 0;
@@ -292,19 +292,18 @@ Dir ExtremeExorcism::Estrategia::invertir(Dir d) const {
 
 
 void ExtremeExorcism::actuarFantasmas() {
-    _fantasmasVivos.clear();
+     _fantasmasVivos.clear();
      linear_set<Pos> posicionesAlcanzadas;
      //pintar el mapa
     for (auto it = _fantasmasVivos_Id.begin(); it!= _fantasmasVivos_Id.end(); ++it) {
         int fantasma = *it;
         Evento evento = _fantasmas[fantasma][_ticks];
+        PosYDir posYDirFantasmas = evento.pos_y_dir();
+        Pos casillero = evento.pos;
+        Dir direccion = evento.dir;
+
+        _fantasmasVivos.push_back(posYDirFantasmas);
         if (evento.dispara) {
-            PosYDir posYDirFantasmas = evento.pos_y_dir();
-            Pos casillero = evento.pos;
-            Dir direccion = evento.dir;
-
-            _fantasmasVivos.push_back(posYDirFantasmas);
-
 
             while (_habitacion.actualizarD(direccion, posYDirFantasmas).pos != posYDirFantasmas.pos) {
                 posYDirFantasmas = _habitacion.actualizarD(direccion, posYDirFantasmas);
@@ -364,9 +363,9 @@ void ExtremeExorcism::actuarJugador(Jugador& j, Accion& a) {
     bool disparo = estadoActual->historial.back().dispara;
 
 //    TODO!!!
-//    linear_set<InfoJV>::iterator datos_en_vivos = *(estadoActual->aInfoJV);
-//    (*(datos_en_vivos)).pos = pos;
-//    (*(datos_en_vivos)).dir = dir;
+ //     linear_set<InfoJV>::iterator datos_en_vivos = *(estadoActual->aInfoJV);
+ //     (*(datos_en_vivos)).pos = pos;
+   //   (*(datos_en_vivos)).dir = dir;
 
 
 

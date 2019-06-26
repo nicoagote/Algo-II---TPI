@@ -382,6 +382,7 @@ TEST(EE, PasarConRepeticion) {
 
 
 // Fantasma mata jugador
+/*
 TEST(EE, FantasmaMataJugador) {
   Localizador *l = new LocalizadorEstatico({
       {"0", {PosYDir({0, 0}, ARRIBA)}},
@@ -461,7 +462,8 @@ TEST(EE, FantasmaMataJugadoresEnMismaPosicion) {
                     "r..\n", ee);
   delete l; 
 }
-
+*/
+/*
 // Disparo fantasma bloqueado por mapa
 TEST(EE, FantasmaNoMataJugadorEnSuCasillero) {
   Localizador *l = new LocalizadorEstatico({
@@ -487,7 +489,7 @@ TEST(EE, FantasmaNoMataJugadorEnSuCasillero) {
   EXPECT_EQ(ee.posicionFantasmas(), list<PosYDir>{PosYDir({0, 1}, ARRIBA)});
   delete l; 
 }
-
+*/
 // Fantasma dispara y jugador se mueve simultáneamente
 TEST(EE, JugadorEsquivaDisparo) {
   Localizador *l = new LocalizadorEstatico({
