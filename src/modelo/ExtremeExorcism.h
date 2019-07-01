@@ -149,9 +149,9 @@ private:
     vector<vector<bool>> _mapa;
     Contexto *_ctx;
 
-    list<Fantasma> aux_1;
-    set<Jugador> aux_2;
-
+    // Agregadas para facilitar la devolución del conjunto de jugadores y de la lista de fantasmas, que usan tipos distintos a como son representadas en nuestra estructura, como la piden unas funciones auxiliares.
+    list<Fantasma> _fantasmasAux;
+    set<Jugador> _jugadoresAux;
 };
 
 #endif

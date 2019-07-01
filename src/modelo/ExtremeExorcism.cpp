@@ -8,7 +8,7 @@ ExtremeExorcism::ExtremeExorcism(Habitacion h, set<Jugador> jugadores, PosYDir f
 _ticks(0), _jugadoresVivos(linear_set<InfoJV>()), _jVJ(linear_set<InfoJ*>()), _jugadores(string_map<InfoJ>()),
 _nombres(linear_set<Jugador>()), _fantasmasVivos(list<PosYDir>()), _fantasmasVivos_Id(linear_set<unsigned int>()),
 _fantasmas(vector<Estrategia>()), _habitacion(h), _mapa(vector<vector<bool>>(h.tam(), vector<bool>(h.tam(), false))),
-_ctx(nullptr), aux_1(list<Fantasma>()), aux_2(jugadores) {
+_ctx(nullptr), _fantasmasAux(list<Fantasma>()), _jugadoresAux(jugadores) {
 
 
     // Generamos la estrategia del fantasma y completamos la información relevante a los fantasmas
@@ -16,7 +16,7 @@ _ctx(nullptr), aux_1(list<Fantasma>()), aux_2(jugadores) {
     _fantasmasVivos.push_back(f_init);
     _fantasmasVivos_Id.fast_insert(0);
 
-    aux_1.push_back((Fantasma) _fantasmas[0]);
+    _fantasmasAux.push_back((Fantasma) _fantasmas[0]);
 
 
     // Usamos la función localizar_jugadores y completamos la información relevante a nuestros jugadores en el juego
@@ -40,9 +40,9 @@ void ExtremeExorcism::pasar() {
     _ticks++;
     actuarFantasmas();
 
-    aux_1.clear();
+    _fantasmasAux.clear();
     for (int i = 0; i < _fantasmas.size(); ++i) {
-        aux_1.push_back((Fantasma) _fantasmas[i]);
+        _fantasmasAux.push_back((Fantasma) _fantasmas[i]);
     }
 }
 
@@ -124,7 +124,7 @@ linear_set<Pos> &ExtremeExorcism::posicionesDisparadasAux(linear_set<Pos> &posic
     list<PosYDir> lista; //lista vacia
     list<PosYDir> &posYDirInicial = disparosFantasmasAux(lista);
 
-    //pinta el mapa de casilleros ocupados
+    // Pinta el mapa de casilleros ocupados
     for (auto it = posYDirInicial.begin(); it != posYDirInicial.end(); ++it){
         PosYDir posydir = *it;
         Pos casillero = posydir.pos;
@@ -165,11 +165,11 @@ PosYDir ExtremeExorcism::posicionJugador(Jugador j) const {
 }
 
 const set<Jugador>& ExtremeExorcism::jugadores() const {
-    return aux_2;
+    return _jugadoresAux;
 }
 
 const list<Fantasma>& ExtremeExorcism::fantasmas() const {
-    return aux_1;
+    return _fantasmasAux;
 }
 
 /*================================= FUNCIONES AUXILIARES ====================================*/
@@ -221,30 +221,29 @@ bool ExtremeExorcism::InfoJV::operator==(ExtremeExorcism::InfoJV x) const {
 
 //Constructor y funciones de Historial----------------------------------------------------------
 
-//Constructor por defecto
+//Constructor por defecto (no debe ser usado por el usuario)
 ExtremeExorcism::Historial::Historial() : historial(list<EventoJugador>()) {}
 
 
-//Constructor custom. Dado un tick, posición y dirección actualiza el historial
+//Constructor. Dadas la posicion inicial y la direccion inicial genera el historial que comienza allí.
 ExtremeExorcism::Historial::Historial(Pos pos, Dir dir){
     historial.push_back(EventoJugador(0, pos, dir, false));
 }
-
-
-
+//Actualiza el historial con el resultado de una acción.
 void ExtremeExorcism::Historial::actuar(Habitacion& h, Accion a, unsigned int tick) {
     EventoJugador nuevoEvento = actualizar(h, a, tick, historial.back());
     historial.push_back(nuevoEvento);
 }
-
+//Actualiza el historial registrando la muerte del jugador en cuestión.
+// ACLARACIóN: en el TPD usamos la posición make_pair(tam(h), tam(h)) como posición designada para registrar que el jugador estaba muerto, pero en la implementación por comodidad preferimos usar la posición (-1, -1) en su lugar.
 void ExtremeExorcism::Historial::morir(unsigned int tick) {
     historial.push_back(EventoJugador(tick, Pos(-1, -1), historial.back().dir, false));
 }
-
+//Devuelve el último evento del historial
 ExtremeExorcism::EventoJugador ExtremeExorcism::Historial::back() const {
     return historial.back();
 }
-
+//Genera la estrategia de un fantasma a partir del historial de un jugador.
 const vector<Evento> ExtremeExorcism::Historial::armarEstrategia() const {
     list<EventoJugador>::const_iterator it = historial.begin();
     Evento def = Evento(historial.front().pos, historial.front().dir, false);
@@ -348,7 +347,7 @@ Evento ExtremeExorcism::Estrategia::actuar(Habitacion &h, Accion a, Evento e) co
 void ExtremeExorcism::actuarFantasmas() {
      _fantasmasVivos.clear();
      linear_set<Pos> posicionesAlcanzadas;
-     //pintar el mapa
+     //Actualiza fantasmasVivos y llena el mapa con las posiciones alcanzadas por disparos de los fantasmas
     for (auto it = _fantasmasVivos_Id.begin(); it!= _fantasmasVivos_Id.end(); ++it) {
         int fantasma = *it;
         Evento evento = _fantasmas[fantasma][_ticks];
@@ -368,9 +367,9 @@ void ExtremeExorcism::actuarFantasmas() {
                 }
             }
         }
+    }
 
-
-
+    //Usando el mapa llenado anteriormente, actualiza los jugadores matando aquellos que se hayan muerto.
     for (auto it = _jVJ.begin(); it != _jVJ.end();) {
         InfoJ* estadoAcutal = *(it);
         linear_set<InfoJV>::iterator nodo_en_vivos = *(estadoAcutal->aInfoJV);
@@ -378,10 +377,12 @@ void ExtremeExorcism::actuarFantasmas() {
 
         if (_mapa[p.first][p.second]) {
             estadoAcutal->historial.morir(_ticks);
+            // ESTA ELIMINACIóN NO SE EJECUTA EN O(1) PERO MARCH NOS LO ADMITIó PORQUE NO ESTáN IMPLEMENTADOS LOS ITERADORES PARA ELIMINAR, MODIFICAR o AGREGAR en O(1)
             _jugadoresVivos.erase(*nodo_en_vivos);
             estadoAcutal->aInfoJV = nullptr;
             auto copiaIt = it;
             ++it;
+            // ESTA ELIMINACIóN NO SE EJECUTA EN O(1) PERO MARCH NOS LO ADMITIó PORQUE NO ESTáN IMPLEMENTADOS LOS ITERADORES PARA ELIMINAR, MODIFICAR o AGREGAR en O(1)
             _jVJ.erase(*copiaIt);
             delete estadoAcutal->aInfoJV;
             estadoAcutal->aInfoJV = NULL;
@@ -391,17 +392,12 @@ void ExtremeExorcism::actuarFantasmas() {
         }
 
     }
-//Despintar el mapa
 
-        for (auto itt = posicionesAlcanzadas.begin(); itt != posicionesAlcanzadas.end(); ++itt) {
-            Pos casillero = *itt;
-            _mapa[get<0>(casillero)][get<1>(casillero)] = false;
-        }
+    //Para mantener el invariante de representación despintamos el mapa
+    for (auto itt = posicionesAlcanzadas.begin(); itt != posicionesAlcanzadas.end(); ++itt) {
+        Pos casillero = *itt;
+        _mapa[get<0>(casillero)][get<1>(casillero)] = false;
     }
-
-
-
-
 }
 
 void ExtremeExorcism::actuarJugador(Jugador& j, Accion& a) {
@@ -413,6 +409,8 @@ void ExtremeExorcism::actuarJugador(Jugador& j, Accion& a) {
     Dir dir = estadoActual->historial.back().dir;
     bool disparo = estadoActual->historial.back().dispara;
 
+    // ESTA ELIMINACIóN NO SE EJECUTA EN O(1) PERO MARCH NOS LO ADMITIó PORQUE NO ESTáN IMPLEMENTADOS LOS ITERADORES PARA ELIMINAR, MODIFICAR o AGREGAR en O(1)
+    // ESTE COMBO erase -> fastInsert SIMULA UNA MODIFICACIóN QUE HUBIESE SIDO EJECUTADA EN O(1)
     _jugadoresVivos.erase(*(*(estadoActual->aInfoJV)));
      *(estadoActual->aInfoJV) = _jugadoresVivos.fast_insert(InfoJV(j, pos, dir));
 
@@ -442,6 +440,7 @@ void ExtremeExorcism::actuarJugador(Jugador& j, Accion& a) {
         if (alcanzadas.count(p_fantasma)) {
             auto copiaIt = it;
             ++it;
+            // ESTA ELIMINACIóN NO SE EJECUTA EN O(1) PERO MARCH NOS LO ADMITIó PORQUE NO ESTáN IMPLEMENTADOS LOS ITERADORES PARA ELIMINAR, MODIFICAR o AGREGAR en O(1)
             _fantasmasVivos_Id.erase(*copiaIt);
             cambioRonda = cambioRonda or id == (_fantasmas.size()-1);
 
@@ -459,22 +458,22 @@ void ExtremeExorcism::resetearFantasmas(Jugador j) {
     Estrategia nuevaEstrategia = Estrategia(_jugadores[j].historial);
     //Agregamos al vector de fantasmas
     _fantasmas.push_back(nuevaEstrategia);
-            //Reseteamos el conjunto de fantmasVivosId
-            for(int i = 0; i < _fantasmas.size(); i++){
-                _fantasmasVivos_Id.insert(i);
-            }
-            //Reseteamos el conjunto de fantasmasVivos
-            _fantasmasVivos.clear();
-            for(int i = 0; i < _fantasmas.size(); i++){
-                Evento e = _fantasmas[i][0];
-                PosYDir pd = e.pos_y_dir();
-                _fantasmasVivos.push_back(pd);
-
+    //Reseteamos el conjunto de fantmasVivosId
+    for(int i = 0; i < _fantasmas.size(); i++){
+        _fantasmasVivos_Id.insert(i);
+    }
+    //Reseteamos el conjunto de fantasmasVivos
+    _fantasmasVivos.clear();
+    for(int i = 0; i < _fantasmas.size(); i++){
+        Evento e = _fantasmas[i][0];
+        PosYDir pd = e.pos_y_dir();
+        _fantasmasVivos.push_back(pd);
     }
 
-    aux_1.clear();
+    //Actualizamos el acmpo _fantasmasAux de nuestra estructura que nos permitirá devolver la lista actualizada de fantasmas en la nueva ronda actual.
+    _fantasmasAux.clear();
     for (int i = 0; i < _fantasmas.size(); ++i) {
-        aux_1.push_back((Fantasma) _fantasmas[i]);
+        _fantasmasAux.push_back((Fantasma) _fantasmas[i]);
     }
 }
 
@@ -521,13 +520,3 @@ Dir ExtremeExorcism::Estrategia::invertir(Dir d) const {
 bool ExtremeExorcism::cambioRonda() {
     return  _fantasmasVivos_Id.count(_fantasmas.size()-1);
 }
-
-
-//Operadores---------------------------------
-
-
-
-
-
-
-
