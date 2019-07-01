@@ -1,9 +1,16 @@
 #include "ExtremeExorcism.h"
 
-// TODO!!! Completar
 
-ExtremeExorcism::ExtremeExorcism(Habitacion h, set<Jugador> jugadores, PosYDir f_init, list<Accion> acciones_fantasma, Contexto *ctx) : _ticks(0), _jugadoresVivos(linear_set<InfoJV>()), _jVJ(linear_set<InfoJ*>()), _jugadores(string_map<InfoJ>()), _nombres(linear_set<Jugador>()), _fantasmasVivos(list<PosYDir>()), _fantasmasVivos_Id(linear_set<unsigned int>()), _fantasmas(vector<Estrategia>()), _habitacion(h), _mapa(vector<vector<bool>>(h.tam(), vector<bool>(h.tam(), false))), _ctx(
-        nullptr), aux_1(list<Fantasma>()), aux_2(jugadores) {
+
+ExtremeExorcism::ExtremeExorcism(Habitacion h, set<Jugador> jugadores, PosYDir f_init, list<Accion> acciones_fantasma, Contexto *ctx) :
+
+
+_ticks(0), _jugadoresVivos(linear_set<InfoJV>()), _jVJ(linear_set<InfoJ*>()), _jugadores(string_map<InfoJ>()),
+_nombres(linear_set<Jugador>()), _fantasmasVivos(list<PosYDir>()), _fantasmasVivos_Id(linear_set<unsigned int>()),
+_fantasmas(vector<Estrategia>()), _habitacion(h), _mapa(vector<vector<bool>>(h.tam(), vector<bool>(h.tam(), false))),
+_ctx(nullptr), aux_1(list<Fantasma>()), aux_2(jugadores) {
+
+
     // Generamos la estrategia del fantasma y completamos la información relevante a los fantasmas
     _fantasmas.push_back(Estrategia(h, f_init, acciones_fantasma));
     _fantasmasVivos.push_back(f_init);
@@ -27,6 +34,8 @@ ExtremeExorcism::ExtremeExorcism(Habitacion h, set<Jugador> jugadores, PosYDir f
     _ctx = ctx;
 }
 
+
+//Todos los jugadores pasan y actuan los fantasmas
 void ExtremeExorcism::pasar() {
     _ticks++;
     actuarFantasmas();
@@ -37,6 +46,7 @@ void ExtremeExorcism::pasar() {
     }
 }
 
+//ejecuta las acciones del jugador que no sea pasar y las de los fantasmas luego.
 void ExtremeExorcism::ejecutarAccion(Jugador j, Accion a) {
     _ticks++;
     actuarJugador(j,a);
@@ -49,6 +59,7 @@ void ExtremeExorcism::ejecutarAccion(Jugador j, Accion a) {
     }
 }
 
+//Devuelve un conjunto con todas las posiciones de los jugadores vivos.
 list<pair<Jugador, PosYDir>> ExtremeExorcism::posicionJugadores() const {
     list<pair<Jugador, PosYDir>> jugadoresVivos;
     for(InfoJV jv : _jugadoresVivos) {
@@ -57,6 +68,7 @@ list<pair<Jugador, PosYDir>> ExtremeExorcism::posicionJugadores() const {
     return jugadoresVivos;
 }
 
+//Devuelve un conjunto con todas las posiciones de los fantasmas vivos
 list<PosYDir> ExtremeExorcism::posicionFantasmas() const {
     return _fantasmasVivos;
 }
@@ -109,10 +121,10 @@ set<Pos> ExtremeExorcism::posicionesDisparadas() {
 }
 
 linear_set<Pos> &ExtremeExorcism::posicionesDisparadasAux(linear_set<Pos> &posicionesAlcanzadas) {
-    list<PosYDir> hola; //lista vacia
-    list<PosYDir> &posYDirInicial = disparosFantasmasAux(hola);
+    list<PosYDir> lista; //lista vacia
+    list<PosYDir> &posYDirInicial = disparosFantasmasAux(lista);
 
-
+    //pinta el mapa de casilleros ocupados
     for (auto it = posYDirInicial.begin(); it != posYDirInicial.end(); ++it){
         PosYDir posydir = *it;
         Pos casillero = posydir.pos;
@@ -128,6 +140,7 @@ linear_set<Pos> &ExtremeExorcism::posicionesDisparadasAux(linear_set<Pos> &posic
         }
 
     }
+
     for (auto itt = posicionesAlcanzadas.begin() ;  itt != posicionesAlcanzadas.end(); ++itt){
         Pos casillero = *itt;
         _mapa[get<0>(casillero)][get<1>(casillero)] = false;
@@ -161,19 +174,19 @@ const list<Fantasma>& ExtremeExorcism::fantasmas() const {
 
 /*================================= FUNCIONES AUXILIARES ====================================*/
 // Para nuestros tipos auxiliares:
-ExtremeExorcism::EventoJugador::EventoJugador(unsigned int t, Pos p, Dir d, bool s) : tick(t), pos(p), dir(d), dispara(s) {}
-PosYDir ExtremeExorcism::EventoJugador::posYDir() const {
-    return PosYDir(pos, dir);
-}
 
+//Contructor y funciones de InfoJ-------------------------
 ExtremeExorcism::InfoJ::InfoJ() : aInfoJV(nullptr), historial(Historial()) {}
+
 ExtremeExorcism::InfoJ::InfoJ(linear_set<InfoJV>::iterator* p, Historial h) : aInfoJV(p), historial(h) {}
+
 ExtremeExorcism::InfoJ::~InfoJ() {
     if(aInfoJV != NULL) {
         delete aInfoJV;
         aInfoJV = NULL;
     }
 }
+
 void ExtremeExorcism::InfoJ::operator=(ExtremeExorcism::InfoJ other) {
     if(aInfoJV != NULL) {
         delete aInfoJV;
@@ -189,6 +202,7 @@ void ExtremeExorcism::InfoJ::operator=(ExtremeExorcism::InfoJ other) {
 }
 
 ExtremeExorcism::InfoJV::InfoJV(Jugador j, Pos p, Dir d) : nombre(j), pos(p), dir(d) {}
+
 PosYDir ExtremeExorcism::InfoJV::posYDir() const {
     return PosYDir(pos, dir);
 }
@@ -196,12 +210,68 @@ ExtremeExorcism::InfoJV::operator pair<Jugador, PosYDir>() const {
     return make_pair(nombre, posYDir());
 }
 
+bool ExtremeExorcism::InfoJ::operator==(ExtremeExorcism::InfoJ x) const {
+    return x.historial == historial and x.aInfoJV == aInfoJV;
+}
+
+bool ExtremeExorcism::InfoJV::operator==(ExtremeExorcism::InfoJV x) const {
+    return x.pos==pos and x.dir==dir and x.nombre==nombre;
+}
+
+
+//Constructor y funciones de Historial----------------------------------------------------------
+
 //Constructor por defecto
 ExtremeExorcism::Historial::Historial() : historial(list<EventoJugador>()) {}
+
+
 //Constructor custom. Dado un tick, posición y dirección actualiza el historial
 ExtremeExorcism::Historial::Historial(Pos pos, Dir dir){
     historial.push_back(EventoJugador(0, pos, dir, false));
 }
+
+
+
+void ExtremeExorcism::Historial::actuar(Habitacion& h, Accion a, unsigned int tick) {
+    EventoJugador nuevoEvento = actualizar(h, a, tick, historial.back());
+    historial.push_back(nuevoEvento);
+}
+
+void ExtremeExorcism::Historial::morir(unsigned int tick) {
+    historial.push_back(EventoJugador(tick, Pos(-1, -1), historial.back().dir, false));
+}
+
+ExtremeExorcism::EventoJugador ExtremeExorcism::Historial::back() const {
+    return historial.back();
+}
+
+const vector<Evento> ExtremeExorcism::Historial::armarEstrategia() const {
+    list<EventoJugador>::const_iterator it = historial.begin();
+    Evento def = Evento(historial.front().pos, historial.front().dir, false);
+    vector<Evento> v = vector<Evento>(historial.back().tick + 1, def);
+
+    for(int i = 0; i < v.size(); i++) {
+        if(it->tick != i) {
+            v[i] = def;
+        } else {
+            v[i] = Evento(it->pos, it->dir, it->dispara);
+            def = Evento(it->pos, it->dir, false);
+            ++it;
+        }
+    }
+    return v;
+}
+
+bool ExtremeExorcism::Historial::operator==(ExtremeExorcism::Historial x) const {
+    return x.historial == historial;
+}
+
+//Funciones de Evento y EventoJugador----------------------------------------------------------
+
+bool ExtremeExorcism::EventoJugador::operator==(ExtremeExorcism::EventoJugador x) const {
+    return x.posYDir() == posYDir() and x.dispara ==dispara and x.tick == tick;
+}
+
 ExtremeExorcism::EventoJugador ExtremeExorcism::Historial::actualizar(Habitacion& h, Accion a, unsigned int tick,
                                                                       ExtremeExorcism::EventoJugador e) {
     EventoJugador nuevoEvento = e;
@@ -221,45 +291,29 @@ ExtremeExorcism::EventoJugador ExtremeExorcism::Historial::actualizar(Habitacion
     }
     return nuevoEvento;
 }
-void ExtremeExorcism::Historial::actuar(Habitacion& h, Accion a, unsigned int tick) {
-    EventoJugador nuevoEvento = actualizar(h, a, tick, historial.back());
-    historial.push_back(nuevoEvento);
-}
-void ExtremeExorcism::Historial::morir(unsigned int tick) {
-    historial.push_back(EventoJugador(tick, Pos(-1, -1), historial.back().dir, false));
-}
-ExtremeExorcism::EventoJugador ExtremeExorcism::Historial::back() const {
-    return historial.back();
-}
-const vector<Evento> ExtremeExorcism::Historial::armarEstrategia() const {
-    list<EventoJugador>::const_iterator it = historial.begin();
-    Evento def = Evento(historial.front().pos, historial.front().dir, false);
-    vector<Evento> v = vector<Evento>(historial.back().tick + 1, def);
 
-    for(int i = 0; i < v.size(); i++) {
-        if(it->tick != i) {
-            v[i] = def;
-        } else {
-            v[i] = Evento(it->pos, it->dir, it->dispara);
-            def = Evento(it->pos, it->dir, false);
-            ++it;
-        }
-    }
+ExtremeExorcism::EventoJugador::EventoJugador(unsigned int t, Pos p, Dir d, bool s) : tick(t), pos(p), dir(d), dispara(s) {}
 
-    return v;
+PosYDir ExtremeExorcism::EventoJugador::posYDir() const {
+    return PosYDir(pos, dir);
 }
 
+//Contructor y funciones de Estrategia--------------------------------------------
 
 ExtremeExorcism::Estrategia::Estrategia(vector<Evento> e) : _estrategia(e) {}
+
 ExtremeExorcism::Estrategia::Estrategia(Habitacion& h, PosYDir init, list<Accion> la) : _estrategia(vector<Evento>(1, Evento(init.pos, init.dir, false))) {
     for (list<Accion>::iterator it = la.begin(); it != la.end(); ++it) {
         _estrategia.push_back(actuar(h, *it, _estrategia[_estrategia.size() - 1]));
     }
 }
+
 ExtremeExorcism::Estrategia::Estrategia(Historial h) : _estrategia(h.armarEstrategia()) {}
+
 ExtremeExorcism::Estrategia::operator Fantasma() const {
     return list<Evento>(_estrategia.begin(), _estrategia.end());
 }
+
 Evento ExtremeExorcism::Estrategia::operator [](unsigned int t) const {
     bool esEnLaIda = 0 == ((t / (_estrategia.size() + 5)) % 2);
     t = t % (_estrategia.size() + 5);
@@ -277,28 +331,18 @@ Evento ExtremeExorcism::Estrategia::operator [](unsigned int t) const {
         }
     }
 }
+
+bool ExtremeExorcism::Estrategia::operator==(ExtremeExorcism::Estrategia x) const {
+    return x._estrategia == _estrategia;
+}
+
 Evento ExtremeExorcism::Estrategia::actuar(Habitacion &h, Accion a, Evento e) const {
     PosYDir ubicacionNueva = h.actualizar(a, e.pos_y_dir());
     return Evento(ubicacionNueva.pos, ubicacionNueva.dir, a == DISPARAR);
 }
-Dir ExtremeExorcism::Estrategia::invertir(Dir d) const {
-    switch (d) {
-    case ARRIBA:
-        d = ABAJO;
-        break;
-    case IZQUIERDA:
-        d = DERECHA;
-        break;
-    case ABAJO:
-        d = ARRIBA;
-        break;
-    case DERECHA:
-        d = IZQUIERDA;
-        break;
-    }
-    return d;
-}
 
+
+//Funciones de actuar el juego.-----------------------------------------------------
 
 
 void ExtremeExorcism::actuarFantasmas() {
@@ -334,8 +378,6 @@ void ExtremeExorcism::actuarFantasmas() {
 
         if (_mapa[p.first][p.second]) {
             estadoAcutal->historial.morir(_ticks);
-            // PREGUNTAR A MARCH
-            // TODO!!
             _jugadoresVivos.erase(*nodo_en_vivos);
             estadoAcutal->aInfoJV = nullptr;
             auto copiaIt = it;
@@ -371,7 +413,6 @@ void ExtremeExorcism::actuarJugador(Jugador& j, Accion& a) {
     Dir dir = estadoActual->historial.back().dir;
     bool disparo = estadoActual->historial.back().dispara;
 
-    // TODO!!! Agregar complejidades
     _jugadoresVivos.erase(*(*(estadoActual->aInfoJV)));
      *(estadoActual->aInfoJV) = _jugadoresVivos.fast_insert(InfoJV(j, pos, dir));
 
@@ -413,17 +454,15 @@ void ExtremeExorcism::actuarJugador(Jugador& j, Accion& a) {
 
 }
 
-        void ExtremeExorcism::resetearFantasmas(Jugador j) {
-            //Crea la Estrategia para el nuevo fantasma (Rellena)
-            Estrategia nuevaEstrategia = Estrategia(_jugadores[j].historial);
-            //Agregamos al vector de fantasmas
-            _fantasmas.push_back(nuevaEstrategia);
-
+void ExtremeExorcism::resetearFantasmas(Jugador j) {
+    //Crea la Estrategia para el nuevo fantasma (Rellena)
+    Estrategia nuevaEstrategia = Estrategia(_jugadores[j].historial);
+    //Agregamos al vector de fantasmas
+    _fantasmas.push_back(nuevaEstrategia);
             //Reseteamos el conjunto de fantmasVivosId
             for(int i = 0; i < _fantasmas.size(); i++){
                 _fantasmasVivos_Id.insert(i);
             }
-
             //Reseteamos el conjunto de fantasmasVivos
             _fantasmasVivos.clear();
             for(int i = 0; i < _fantasmas.size(); i++){
@@ -438,6 +477,7 @@ void ExtremeExorcism::actuarJugador(Jugador& j, Accion& a) {
         aux_1.push_back((Fantasma) _fantasmas[i]);
     }
 }
+
 
 void ExtremeExorcism::resetearJugadores() {
     // Usamos la función localizar_jugadores y completamos la información relevante a nuestros jugadores en el juego
@@ -458,26 +498,36 @@ void ExtremeExorcism::resetearJugadores() {
     }
 }
 
+
+Dir ExtremeExorcism::Estrategia::invertir(Dir d) const {
+    switch (d) {
+        case ARRIBA:
+            d = ABAJO;
+            break;
+        case IZQUIERDA:
+            d = DERECHA;
+            break;
+        case ABAJO:
+            d = ARRIBA;
+            break;
+        case DERECHA:
+            d = IZQUIERDA;
+            break;
+    }
+    return d;
+}
+
+
 bool ExtremeExorcism::cambioRonda() {
     return  _fantasmasVivos_Id.count(_fantasmas.size()-1);
 }
 
-bool ExtremeExorcism::InfoJ::operator==(ExtremeExorcism::InfoJ x) const {
-    return x.historial == historial and x.aInfoJV == aInfoJV;
-}
 
-bool ExtremeExorcism::InfoJV::operator==(ExtremeExorcism::InfoJV x) const {
-    return x.pos==pos and x.dir==dir and x.nombre==nombre;
-}
+//Operadores---------------------------------
 
-bool ExtremeExorcism::EventoJugador::operator==(ExtremeExorcism::EventoJugador x) const {
-    return x.posYDir() == posYDir() and x.dispara ==dispara and x.tick == tick;
-}
 
-bool ExtremeExorcism::Historial::operator==(ExtremeExorcism::Historial x) const {
-    return x.historial == historial;
-}
 
-bool ExtremeExorcism::Estrategia::operator==(ExtremeExorcism::Estrategia x) const {
-    return x._estrategia == _estrategia;
-}
+
+
+
+
